@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Successful | Amar Educational Cafe</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .success-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 600px;
+            border: 1px solid #4caf50;
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .whatsapp-btn {
+            display: inline-block;
+            background: #25d366;
+            color: #fff;
+            font-weight: 700;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 25px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+        }
+        .btn {
+            display: inline-block;
+            padding: 16px 45px;
+            background: #ffa500;
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(255,165,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="success-box">
+        <div class="icon">✅</div>
+        <h1>Details Saved!</h1>
+        <p>Your enrollment information has been captured.</p>
+        <p><strong>Next Step:</strong> Send your details to us via WhatsApp for immediate confirmation and fee discussion.</p>
+        
+        <!-- WhatsApp link button -->
+        <a id="whatsappLink" class="whatsapp-btn" href="#" target="_blank">
+            📱 Send via WhatsApp
+        </a>
+        
+        <br>
+        <a href="index.html" class="btn">Back to Home</a>
+    </div>
+
+    <script>
+        // Coaching ka WhatsApp number (country code ke saath, bina '+')
+        const coachingNumber = "918057232954"; // 👈 Apna number yahan set karo
+        
+        // URL se data parse karo
+        const params = new URLSearchParams(window.location.search);
+        const name = decodeURIComponent(params.get('name') || '');
+        const studentClass = decodeURIComponent(params.get('class') || '');
+        const batch = decodeURIComponent(params.get('batch') || '');
+        const phone = decodeURIComponent(params.get('phone') || '');
+        const subjects = decodeURIComponent(params.get('subjects') || 'Not Selected');
+        
+        // Message format
+        const message = `📋 *New Batch Enrollment* %0A%0A` +
+                        `👤 *Name:* ${name} %0A` +
+                        `🏫 *Class:* ${studentClass} %0A` +
+                        `⏰ *Batch:* ${batch} %0A` +
+                        `📞 *Phone:* ${phone} %0A` +
+                        `📚 *Subjects:* ${subjects} %0A%0A` +
+                        `_Kindly provide fee details._`;
+        
+        // WhatsApp URL set karo
+        const whatsappUrl = `https://wa.me/${coachingNumber}?text=${message}`;
+        document.getElementById('whatsappLink').href = whatsappUrl;
+    </script>
+</body>
+</html>

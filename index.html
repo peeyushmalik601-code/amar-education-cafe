@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amar Educational Cafe | Where Learning Becomes Magic</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #080b12;
+            --cyan: #00e5ff;
+            --pink: #ff2d95;
+            --amber: #ffb300;
+            --glass-bg: rgba(10, 15, 30, 0.5);
+            --glass-border: rgba(0, 229, 255, 0.2);
+            --blur: 10px;
+            --text: #e0e0e0;
+            --heading-font: 'Orbitron', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--body-font);
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ===== PARTICLE CANVAS ===== */
+        #particleCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .aurora {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .aurora-1 {
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            top: -20%; left: -10%;
+            animation: driftAurora1 20s infinite alternate ease-in-out;
+        }
+        .aurora-2 {
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pink) 0%, transparent 70%);
+            bottom: -10%; right: -5%;
+            animation: driftAurora2 25s infinite alternate ease-in-out;
+        }
+        @keyframes driftAurora1 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10vw, 5vh); }
+        }
+        @keyframes driftAurora2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-8vw, -3vh); }
+        }
+
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 229, 255, 0.02) 0px,
+                rgba(0, 229, 255, 0.02) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out;
+        }
+        #loader.hidden { opacity: 0; pointer-events: none; }
+        .loader-logo {
+            font-family: var(--heading-font);
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan), var(--pink), var(--amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glitch 1.5s infinite;
+            letter-spacing: 0.1em;
+        }
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -1px); }
+            60% { transform: translate(-1px, -2px); }
+            80% { transform: translate(1px, 1px); }
+        }
+        .loader-bar {
+            width: 200px; height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+        .loader-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--pink), var(--amber));
+            border-radius: 10px;
+            animation: loadFill 2s ease-out forwards;
+        }
+        @keyframes loadFill { 0% { width: 0%; } 100% { width: 100%; } }
+
+        .cursor {
+            position: fixed; width: 20px; height: 20px;
+            border: 2px solid var(--cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s ease, background 0.2s, border-color 0.2s;
+            mix-blend-mode: difference;
+        }
+        .cursor-dot {
+            position: fixed; width: 6px; height: 6px;
+            background: var(--cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            transition: transform 0.05s linear;
+        }
+        @media (hover: none), (pointer: coarse) {
+            .cursor, .cursor-dot { display: none; }
+            body { cursor: auto; }
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur));
+            -webkit-backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border);
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 8%;
+            position: fixed; top: 0; width: 100%; z-index: 99;
+            background: rgba(8, 11, 18, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            flex-wrap: wrap;
+        }
+        .logo { font-family: var(--heading-font); font-size: 22px; font-weight: 700; color: var(--cyan); }
+        .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 15px; font-weight: 500; transition: var(--transition); position: relative; }
+        .nav-links a:hover { color: var(--cyan); }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--cyan); transition: width 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--cyan); }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, var(--cyan), var(--pink));
+            color: #fff;
+            font-family: var(--heading-font);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+        .btn::before {
+            content: '';
+            position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn:hover::before { width: 300px; height: 300px; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 0 40px rgba(0, 229, 255, 0.5), 0 0 80px rgba(255, 45, 149, 0.3); }
+
+        section { padding: 100px 5%; position: relative; z-index: 10; }
+        .section-title {
+            font-family: var(--heading-font); text-align: center;
+            font-size: 38px; margin-bottom: 60px;
+            color: var(--cyan); position: relative; letter-spacing: 0.05em;
+        }
+        .section-title::after {
+            content: ''; display: block; width: 80px; height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--pink));
+            margin: 15px auto 0; border-radius: 2px;
+        }
+
+        /* ===== TOP SLIDER (16:9) – shifted down ===== */
+        .top-slider {
+            margin-top: 100px;
+            padding-top: 20px;
+            width: 100%;
+            position: relative;
+            padding-bottom: 56.25%;     /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            background: #111;
+        }
+        .slider-track {
+            position: absolute;
+            top: 0; left: 0;
+            width: 400%; height: 100%;
+            display: flex;
+            animation: slideBanner 20s infinite;
+        }
+        .slider-track .slide {
+            width: 25%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+        @keyframes slideBanner {
+            0%,15%   { transform: translateX(0); }
+            20%,40%  { transform: translateX(-25%); }
+            45%,65%  { transform: translateX(-50%); }
+            70%,90%  { transform: translateX(-75%); }
+            95%,100% { transform: translateX(0); }
+        }
+
+        /* ===== TOPPERS SLIDER (portrait, one at a time, correct animation) ===== */
+        .toppers-slider-container {
+            display: flex; justify-content: center;
+        }
+        .toppers-slider {
+            width: 92vw;
+            max-width: 500px;
+            height: 55vh;
+            max-height: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur));
+            -webkit-backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(255, 45, 149, 0.2);
+        }
+        .toppers-track {
+            display: flex;
+            width: 500%;                /* 5 slides */
+            height: 100%;
+            animation: slideToppers 25s infinite;
+        }
+        .topper-slide {
+            width: 20%;                 /* 100%/5 = 20% of track = one container width */
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #111;
+            flex-shrink: 0;
+        }
+        @keyframes slideToppers {
+            0%,12%   { transform: translateX(0); }
+            16%,32%  { transform: translateX(-20%); }   /* move by one container width */
+            36%,52%  { transform: translateX(-40%); }
+            56%,72%  { transform: translateX(-60%); }
+            76%,92%  { transform: translateX(-80%); }
+            96%,100% { transform: translateX(0); }
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 80vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+            padding: 60px 5%; position: relative; z-index: 10;
+        }
+        .hero h1 { font-family: var(--heading-font); font-size: clamp(40px, 8vw, 65px); margin-bottom: 20px; color: #fff; }
+        .hero h1 span { color: var(--cyan); text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+        .hero .tagline { font-size: 24px; font-style: italic; color: var(--amber); margin-bottom: 10px; }
+        .hero .desc { font-size: 18px; opacity: 0.9; max-width: 700px; margin-bottom: 30px; }
+
+        .reveal { opacity: 0; transform: translateY(30px); filter: blur(4px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .stat-card {
+            background: var(--glass-bg); backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 40px 20px;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-8px); border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 229, 255, 0.3); }
+        .stat-card h2 { font-family: var(--heading-font); font-size: 48px; color: var(--cyan); margin-bottom: 10px; }
+
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .subject-card {
+            background: var(--glass-bg); backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 40px 25px; text-align: center;
+            transition: all 0.3s ease;
+        }
+        .subject-card:hover { transform: translateY(-10px); border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 229, 255, 0.4); }
+        .subject-card .icon { font-size: 60px; margin-bottom: 20px; }
+        .subject-card h3 { font-size: 26px; margin-bottom: 15px; color: var(--cyan); font-family: var(--heading-font); }
+
+        .teachers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+        .teacher-card {
+            background: var(--glass-bg); backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 30px 20px; text-align: center;
+            transition: all 0.3s ease;
+        }
+        .teacher-card:hover { transform: translateY(-8px); border-color: var(--cyan); box-shadow: 0 0 25px rgba(0, 229, 255, 0.3); }
+        .teacher-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cyan); margin-bottom: 15px; }
+        .teacher-card h4 { font-family: var(--heading-font); font-size: 20px; color: var(--cyan); margin-bottom: 5px; }
+
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .testimonial-card {
+            background: var(--glass-bg); backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 30px; transition: all 0.3s ease;
+        }
+        .testimonial-card:hover { border-color: var(--cyan); box-shadow: 0 0 25px rgba(0, 229, 255, 0.2); }
+        .testimonial-card p { font-style: italic; margin-bottom: 15px; }
+        .testimonial-card .student { color: var(--cyan); font-weight: 700; }
+
+        .contact-form { max-width: 600px; margin: 0 auto; }
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 15px; margin-bottom: 20px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            border-radius: 10px; color: #fff; font-size: 16px; backdrop-filter: blur(5px);
+        }
+        .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.4); }
+        .contact-form textarea { height: 150px; resize: vertical; }
+
+        .social-section { padding: 60px 5%; text-align: center; background: rgba(0,0,0,0.3); backdrop-filter: blur(15px); }
+        .social-section h3 { font-family: var(--heading-font); font-size: 32px; color: var(--cyan); margin-bottom: 10px; }
+        .social-icons { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .social-icon {
+            width: 70px; height: 70px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; color: #fff; text-decoration: none;
+            transition: all 0.3s; background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+        }
+        .social-icon:hover { transform: translateY(-8px); box-shadow: 0 0 30px currentColor; }
+        .social-icon.instagram:hover { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); border-color: transparent; }
+        .social-icon.youtube:hover { background: #FF0000; border-color: transparent; }
+        .social-icon.facebook:hover { background: #1877F2; border-color: transparent; }
+
+        footer { text-align: center; padding: 30px; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); }
+
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 10px; }
+            .section-title { font-size: 28px; }
+            .toppers-slider { width: 94vw; max-width: 95vw; height: 50vh; }
+            .top-slider { margin-top: 110px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+            .slider-track, .toppers-track { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+
+    <canvas id="particleCanvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div id="loader">
+        <div class="loader-logo">AEC</div>
+        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <nav>
+        <div class="logo">📚 AMAR EDUCATION CAFE</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#subjects">Subjects</a></li>
+            <li><a href="#batches">Batches</a></li>
+            <li><a href="#teachers">Teachers</a></li>
+            <li><a href="#toppers">Toppers</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#query">Query</a></li>
+        </ul>
+    </nav>
+
+    <!-- TOP SLIDER (16:9) -->
+    <div class="top-slider">
+        <div class="slider-track">
+            <div class="slide" style="background-image: url('images/poster1.jpg');"></div>
+            <div class="slide" style="background-image: url('images/poster2.jpg');"></div>
+            <div class="slide" style="background-image: url('images/poster3.jpg');"></div>
+            <div class="slide" style="background-image: url('images/poster4.jpg');"></div>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero" id="home">
+        <h1>Welcome to <span>Amar Education Cafe</span></h1>
+        <p class="tagline">"Where Learning Becomes Magic!"</p>
+        <p class="desc">Expert tuition classes for Class 01st to 12th — Maths, Science & more. Learn from the best teachers with 15+ years of experience.</p>
+        <a href="#batches" class="btn">Enroll Now</a>
+    </div>
+
+    <!-- STATS -->
+    <section id="stats" class="reveal">
+        <div class="stats-grid">
+            <div class="stat-card"><h2>15+</h2><p>Years Experience</p></div>
+            <div class="stat-card"><h2>2000+</h2><p>Students Taught</p></div>
+            <div class="stat-card"><h2>10+</h2><p>Expert Teachers</p></div>
+            <div class="stat-card"><h2>100%</h2><p>Results Guaranteed</p></div>
+        </div>
+    </section>
+
+    <!-- SUBJECTS -->
+    <section id="subjects" class="reveal">
+        <h2 class="section-title">Our Subjects</h2>
+        <div class="subjects-grid">
+            <div class="subject-card"><div class="icon">📐</div><h3>Mathematics</h3><p>Algebra, Geometry, Trigonometry, Calculus — learn with simple tricks.</p></div>
+            <div class="subject-card"><div class="icon">🔬</div><h3>Physics</h3><p>Mechanics, Optics, Electricity — understand concepts with real-life examples.</p></div>
+            <div class="subject-card"><div class="icon">🧪</div><h3>Chemistry</h3><p>Organic, Inorganic, Physical — master chemical equations and reactions.</p></div>
+            <div class="subject-card"><div class="icon">🧬</div><h3>Biology</h3><p>Botany, Zoology, Human Physiology — learn with diagrams and models.</p></div>
+            <div class="subject-card"><div class="icon">📖</div><h3>English</h3><p>Grammar, Writing Skills, Literature — improve communication and score high.</p></div>
+        </div>
+    </section>
+
+    <!-- BATCHES -->
+    <section id="batches" class="reveal">
+        <h2 class="section-title">Flexible Batches</h2>
+        <p style="text-align:center; font-size:18px; margin-bottom:40px;">Choose a batch that fits your schedule. All timings are evening slots.</p>
+        <div class="subjects-grid" style="margin-bottom:40px;">
+            <div class="subject-card"><div class="icon">🕒</div><h3>Batch 1</h3><p>3:30 PM – 4:30 PM</p><p style="margin-top:10px; opacity:0.8;">Ideal for early school off</p></div>
+            <div class="subject-card"><div class="icon">🕓</div><h3>Batch 2</h3><p>4:30 PM – 5:30 PM</p><p style="margin-top:10px; opacity:0.8;">Most popular slot</p></div>
+            <div class="subject-card"><div class="icon">🕔</div><h3>Batch 3</h3><p>5:30 PM – 6:30 PM</p><p style="margin-top:10px; opacity:0.8;">For late comers</p></div>
+        </div>
+        <div style="text-align:center;"><a href="batch-enroll.html" class="btn">Enroll for Batch</a></div>
+    </section>
+
+    <!-- TEACHERS -->
+    <section id="teachers" class="reveal">
+        <h2 class="section-title">Know Your Teachers</h2>
+        <div class="teachers-grid">
+            <div class="teacher-card"><img src="images/amarpal-sir.jpg" alt="AmarPal Sir"><h4>AmarPal Sir</h4><p>Mathematics Specialist</p></div>
+            <div class="teacher-card"><img src="images/arvind-sir.jpg" alt="Arvind Sir"><h4>Arvind Sir</h4><p>Physics Expert</p></div>
+            <div class="teacher-card"><img src="images/pk-sir.jpg" alt="P.K. Sir"><h4>P.K. Sir</h4><p>Chemistry Expert</p></div>
+            <div class="teacher-card"><img src="images/tarun-sir.jpg" alt="Tarun Sir"><h4>Tarun Sir</h4><p>Biology Expert</p></div>
+            <div class="teacher-card"><img src="images/dheeraj-sir.jpg" alt="Dheeraj Sir"><h4>Dheeraj Sir</h4><p>English Expert</p></div>
+            <div class="teacher-card"><img src="images/komal-mam.jpg" alt="Komal Mam"><h4>Komal Mam</h4><p>Math Expert</p></div>
+            <div class="teacher-card"><img src="images/pradeep-sir.jpg" alt="Pradeep Sir"><h4>Pradeep Sir</h4><p>Bio Expert</p></div>
+        </div>
+    </section>
+
+    <!-- ===== TOPPERS (ONE AT A TIME, WIDER, CORRECT ANIMATION) ===== -->
+    <section id="toppers" class="reveal">
+        <h2 class="section-title">Our Toppers</h2>
+        <div class="toppers-slider-container">
+            <div class="toppers-slider">
+                <div class="toppers-track">
+                    <div class="topper-slide" style="background-image: url('images/topper.jpg');"></div>
+                    <div class="topper-slide" style="background-image: url('images/topper1.jpg');"></div>
+                    <div class="topper-slide" style="background-image: url('images/topper2.jpg');"></div>
+                    <div class="topper-slide" style="background-image: url('images/topper3.jpg');"></div>
+                    <div class="topper-slide" style="background-image: url('images/topper4.jpg');"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="reveal">
+        <h2 class="section-title">What Students Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card"><p>"Amar Sir ki tricks ne Maths easy bana di. Mere 10th mein 100/100 marks aaye!"</p><div class="student">— PEEYUSH MALIK</div></div>
+            <div class="testimonial-card"><p>"Physics mein pehle darr lagta tha, ab favourite subject ban gaya. Thank you Arvind Sir!"</p><div class="student">— Priya, Class 11</div></div>
+            <div class="testimonial-card"><p>"Coaching ka mahaul itna friendly hai ki padhai boring hi nahi lagti."</p><div class="student">— Aman, Class 10</div></div>
+        </div>
+    </section>
+
+    <!-- QUERY -->
+    <section id="query" class="reveal">
+        <h2 class="section-title">Ask Your Query</h2>
+        <p style="text-align:center; font-size:18px; margin-bottom:30px;">Have a doubt? Send us your query directly on WhatsApp.</p>
+        <form id="queryForm" class="contact-form" onsubmit="return sendQuery(event)">
+            <input type="text" id="q-name" name="name" placeholder="Your Name" required>
+            <input type="tel" id="q-phone" name="phone" placeholder="Phone Number (Optional)">
+            <textarea id="q-message" name="message" placeholder="Write your query here..." required></textarea>
+            <button type="submit" class="btn">Send Query on WhatsApp</button>
+        </form>
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top:30px; font-size:16px; flex-wrap: wrap;">
+    <!-- Left: First Branch -->
+    <div style="flex: 1; min-width: 200px; padding: 10px;">
+        <h4 style="color: var(--cyan); margin-bottom: 5px;">Our First Branch</h4>
+        <p>📍 Parsaul, Greater Noida</p>
+    </div>
+    <!-- Right: Second Branch -->
+    <div style="flex: 1; min-width: 200px; padding: 10px; text-align: right;">
+        <h4 style="color: var(--cyan); margin-bottom: 5px;">Our Second Branch</h4>
+        <p>📍 71Villa, 7th Park View, Yamuna Gaur City, Greater Noida</p>
+    </div>
+</div>
+<div style="text-align:center; font-size:18px; margin-top:10px;">
+    <p>📞 8057232954 / 6398390749</p>
+</div>
+
+    <!-- SOCIAL -->
+    <section class="social-section reveal" id="social">
+        <h3>Let's Get Social</h3>
+        <p>Follow us for updates, tips, and behind-the-scenes</p>
+        <div class="social-icons">
+            <a href="https://instagram.com/amareducationcaffe" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com/@amar_educational_cafe" target="_blank" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+            <a href="https://facebook.com/amar.educational.cafe" target="_blank" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Amar Education Cafe | Made with ❤️ for your better future</p>
+    </footer>
+
+    <script>
+        /* ========== LOADER ========== */
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2200);
+        });
+
+        /* ========== WHATSAPP ========== */
+        function sendQuery(event) {
+            event.preventDefault();
+            const name = document.getElementById('q-name').value.trim();
+            const phone = document.getElementById('q-phone').value.trim();
+            const message = document.getElementById('q-message').value.trim();
+            const coachingNumber = "918057232954";
+            let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
+            if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
+            whatsappMsg += `%0A💬 *Message:* ${message}`;
+            const url = `https://wa.me/${coachingNumber}?text=${whatsappMsg}`;
+            window.open(url, '_blank');
+            return false;
+        }
+
+        /* ========== REVEAL ========== */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        /* ========== CUSTOM CURSOR ========== */
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        if (cursor && cursorDot) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX - 10 + 'px';
+                cursor.style.top = e.clientY - 10 + 'px';
+                cursorDot.style.left = e.clientX - 3 + 'px';
+                cursorDot.style.top = e.clientY - 3 + 'px';
+            });
+            document.addEventListener('mouseout', () => {
+                cursor.style.opacity = '0'; cursorDot.style.opacity = '0';
+            });
+            document.addEventListener('mouseover', () => {
+                cursor.style.opacity = '1'; cursorDot.style.opacity = '1';
+            });
+        }
+
+        /* ========== MAGNETIC BUTTONS ========== */
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width/2;
+                const y = e.clientY - rect.top - rect.height/2;
+                btn.style.transform = `translate(${x*0.15}px, ${y*0.15}px) scale(1.05)`;
+                btn.style.transition = 'transform 0.1s ease-out';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0) scale(1)';
+                btn.style.transition = 'transform 0.3s ease-out';
+            });
+        });
+
+        /* ========== PARTICLES ========== */
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 80;
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+        }
+        function resizeParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                const p = new Particle();
+                p.x = Math.random() * canvas.width;
+                p.y = Math.random() * canvas.height;
+                particles.push(p);
+            }
+        }
+        window.addEventListener('resize', resizeParticles);
+        resizeParticles();
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                ctx.beginPath();
+                ctx.arc(particles[i].x, particles[i].y, particles[i].radius, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.8)';
+                ctx.fill();
+                for (let j = i+1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx+dy*dy);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${0.1 * (1 - dist/100)})`;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</body>
+</html>
