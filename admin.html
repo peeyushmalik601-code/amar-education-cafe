@@ -29,14 +29,6 @@
             overflow-x: hidden;
         }
         
-        /* Background Animation */
-        .bg-animation {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
         .aurora {
             position: fixed;
             border-radius: 50%;
@@ -74,7 +66,6 @@
             z-index: 1;
         }
         
-        /* Login Overlay */
         .login-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -97,21 +88,14 @@
             width: 90%;
             box-shadow: 0 0 50px rgba(0, 229, 255, 0.1);
         }
-        .login-box .icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
+        .login-box .icon { font-size: 60px; margin-bottom: 20px; }
         .login-box h2 {
             font-family: 'Orbitron', sans-serif;
             font-size: 28px;
             color: var(--cyan);
             margin-bottom: 10px;
         }
-        .login-box p {
-            opacity: 0.7;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
+        .login-box p { opacity: 0.7; margin-bottom: 30px; font-size: 14px; }
         .login-box input {
             width: 100%;
             padding: 15px;
@@ -136,7 +120,6 @@
             display: none;
         }
         
-        /* Header */
         .admin-header {
             display: flex;
             justify-content: space-between;
@@ -155,23 +138,10 @@
             color: var(--cyan);
             text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
         }
-        .admin-header .title-section p {
-            opacity: 0.6;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .last-login {
-            font-size: 12px;
-            opacity: 0.5;
-            margin-right: 15px;
-        }
+        .admin-header .title-section p { opacity: 0.6; font-size: 14px; margin-top: 5px; }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .last-login { font-size: 12px; opacity: 0.5; margin-right: 15px; }
         
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 8px;
@@ -197,10 +167,7 @@
             align-items: center;
             gap: 8px;
         }
-        .tab-btn:hover {
-            opacity: 1;
-            background: rgba(0, 229, 255, 0.05);
-        }
+        .tab-btn:hover { opacity: 1; background: rgba(0, 229, 255, 0.05); }
         .tab-btn.active {
             background: linear-gradient(135deg, var(--cyan), var(--pink));
             border-color: transparent;
@@ -219,24 +186,13 @@
             margin-left: 5px;
         }
         
-        /* Panels */
-        .panel {
-            display: none;
-            animation: fadeSlideIn 0.4s ease;
-        }
+        .panel { display: none; animation: fadeSlideIn 0.4s ease; }
         .panel.active { display: block; }
         @keyframes fadeSlideIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Cards */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(15px);
@@ -246,10 +202,7 @@
             margin-bottom: 25px;
             transition: all 0.3s ease;
         }
-        .card:hover {
-            border-color: rgba(0, 229, 255, 0.4);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
-        }
+        .card:hover { border-color: rgba(0, 229, 255, 0.4); box-shadow: 0 0 30px rgba(0, 229, 255, 0.1); }
         .card h2 {
             font-family: 'Orbitron', sans-serif;
             color: var(--cyan);
@@ -259,11 +212,8 @@
             align-items: center;
             gap: 10px;
         }
-        .card h2 i {
-            font-size: 24px;
-        }
+        .card h2 i { font-size: 24px; }
         
-        /* Stats Cards */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -279,43 +229,14 @@
             text-align: center;
             transition: all 0.3s ease;
         }
-        .stat-mini-card:hover {
-            border-color: var(--cyan);
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.2);
-        }
-        .stat-mini-card .stat-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-        .stat-mini-card .stat-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 36px;
-            color: var(--cyan);
-            font-weight: 900;
-        }
-        .stat-mini-card .stat-label {
-            opacity: 0.7;
-            margin-top: 5px;
-            font-size: 14px;
-        }
+        .stat-mini-card:hover { border-color: var(--cyan); transform: translateY(-5px); box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); }
+        .stat-mini-card .stat-icon { font-size: 40px; margin-bottom: 10px; }
+        .stat-mini-card .stat-number { font-family: 'Orbitron', sans-serif; font-size: 36px; color: var(--cyan); font-weight: 900; }
+        .stat-mini-card .stat-label { opacity: 0.7; margin-top: 5px; font-size: 14px; }
         
-        /* Forms */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group label {
-            margin-bottom: 8px;
-            opacity: 0.8;
-            font-size: 14px;
-            font-weight: 500;
-        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 8px; opacity: 0.8; font-size: 14px; font-weight: 500; }
         input, select, textarea {
             width: 100%;
             padding: 14px 16px;
@@ -327,21 +248,15 @@
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
         }
-        input::placeholder, textarea::placeholder { 
-            color: rgba(255,255,255,0.3); 
-        }
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--cyan);
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
             background: rgba(255,255,255,0.08);
         }
-        select option {
-            background: #1a1a2e;
-            color: #fff;
-        }
+        select option { background: #1a1a2e; color: #fff; }
         
-        /* Buttons */
         .btn {
             padding: 14px 35px;
             background: linear-gradient(135deg, var(--cyan), var(--pink));
@@ -358,47 +273,17 @@
             gap: 8px;
             font-family: 'Inter', sans-serif;
         }
-        .btn:hover {
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
-            transform: translateY(-2px);
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .btn-danger {
-            background: linear-gradient(135deg, #ff4444, #cc0000);
-        }
-        .btn-danger:hover {
-            box-shadow: 0 0 25px rgba(255, 68, 68, 0.4);
-        }
-        .btn-warning {
-            background: linear-gradient(135deg, var(--amber), #ff6d00);
-        }
-        .btn-small {
-            padding: 8px 18px;
-            font-size: 13px;
-            border-radius: 6px;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-        }
-        .btn-outline:hover {
-            background: rgba(0, 229, 255, 0.1);
-            box-shadow: none;
-        }
+        .btn:hover { box-shadow: 0 0 25px rgba(0, 229, 255, 0.4); transform: translateY(-2px); }
+        .btn:active { transform: scale(0.98); }
+        .btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
+        .btn-danger:hover { box-shadow: 0 0 25px rgba(255, 68, 68, 0.4); }
+        .btn-warning { background: linear-gradient(135deg, var(--amber), #ff6d00); }
+        .btn-small { padding: 8px 18px; font-size: 13px; border-radius: 6px; }
+        .btn-outline { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); }
+        .btn-outline:hover { background: rgba(0, 229, 255, 0.1); box-shadow: none; }
         
-        /* Table */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 10px;
-        }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
+        .table-wrapper { overflow-x: auto; border-radius: 10px; }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 600px; }
         .data-table thead th {
             text-align: left;
             padding: 16px;
@@ -410,28 +295,18 @@
             letter-spacing: 0.5px;
             border-bottom: 2px solid var(--border);
         }
-        .data-table tbody td {
-            padding: 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 14px;
-        }
-        .data-table tbody tr {
-            transition: all 0.2s ease;
-        }
-        .data-table tbody tr:hover {
-            background: rgba(0, 229, 255, 0.03);
-        }
+        .data-table tbody td { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+        .data-table tbody tr { transition: all 0.2s ease; }
+        .data-table tbody tr:hover { background: rgba(0, 229, 255, 0.03); }
         .student-photo {
-            width: 45px;
-            height: 45px;
+            width: 45px; height: 45px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--cyan);
             box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
         }
         .no-photo {
-            width: 45px;
-            height: 45px;
+            width: 45px; height: 45px;
             border-radius: 50%;
             background: rgba(0, 229, 255, 0.1);
             display: flex;
@@ -442,16 +317,8 @@
             border: 2px solid var(--border);
         }
         
-        /* Photo Preview */
-        .photo-upload-area {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
         .photo-preview-box {
-            width: 130px;
-            height: 130px;
+            width: 130px; height: 130px;
             border: 2px dashed var(--border);
             border-radius: 15px;
             display: flex;
@@ -461,21 +328,10 @@
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.02);
         }
-        .photo-preview-box:hover {
-            border-color: var(--cyan);
-        }
-        .photo-preview-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .photo-preview-box.small {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-        }
+        .photo-preview-box:hover { border-color: var(--cyan); }
+        .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-preview-box.small { width: 80px; height: 80px; border-radius: 50%; }
         
-        /* Alert Messages */
         .alert {
             padding: 15px 20px;
             border-radius: 10px;
@@ -487,65 +343,60 @@
             from { transform: translateY(-10px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        .alert-success {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid #4caf50;
-            color: #4caf50;
-        }
-        .alert-error {
-            background: rgba(244, 67, 54, 0.2);
-            border: 1px solid #f44336;
-            color: #f44336;
-        }
-        .alert-info {
-            background: rgba(0, 229, 255, 0.2);
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-        }
+        .alert-success { background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; }
+        .alert-error { background: rgba(244, 67, 54, 0.2); border: 1px solid #f44336; color: #f44336; }
+        .alert-info { background: rgba(0, 229, 255, 0.2); border: 1px solid var(--cyan); color: var(--cyan); }
         
-        /* Search Bar */
-        .search-bar {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .search-bar input {
-            padding-left: 45px;
-            background: rgba(255,255,255,0.03);
-        }
-        .search-bar i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--cyan);
-            opacity: 0.5;
-        }
+        .search-bar { position: relative; margin-bottom: 20px; }
+        .search-bar input { padding-left: 45px; background: rgba(255,255,255,0.03); }
+        .search-bar i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--cyan); opacity: 0.5; }
         
-        /* Action buttons in table */
-        .action-btns {
+        .action-btns { display: flex; gap: 8px; }
+        
+        .empty-state { text-align: center; padding: 50px; opacity: 0.5; }
+        .empty-state i { font-size: 60px; margin-bottom: 20px; display: block; }
+        
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
             display: flex;
-            gap: 8px;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            padding: 16px 24px;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 3.5s forwards;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast-success { background: rgba(76, 175, 80, 0.9); border: 1px solid #4caf50; }
+        .toast-error { background: rgba(244, 67, 54, 0.9); border: 1px solid #f44336; }
+        .toast-info { background: rgba(0, 229, 255, 0.9); border: 1px solid #00e5ff; color: #000; }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100%); }
         }
         
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 50px;
-            opacity: 0.5;
-        }
-        .empty-state i {
-            font-size: 60px;
-            margin-bottom: 20px;
-            display: block;
-        }
-        
-        /* Modal */
+        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0,0,0,0.8);
-            z-index: 9999;
+            z-index: 99999;
             display: none;
             justify-content: center;
             align-items: center;
@@ -560,51 +411,36 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
+            animation: modalPop 0.3s ease;
         }
-        .modal h3 {
-            color: var(--cyan);
-            margin-bottom: 15px;
-            font-size: 22px;
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-        .modal p {
-            opacity: 0.8;
-            margin-bottom: 25px;
-        }
+        .modal h3 { color: var(--cyan); margin-bottom: 15px; font-size: 22px; }
+        .modal p { opacity: 0.8; margin-bottom: 25px; line-height: 1.6; }
+        .modal .btn { margin: 5px; }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .container { padding: 10px; }
-            .admin-header { 
-                flex-direction: column; 
-                text-align: center; 
-            }
-            .admin-header .title-section h1 {
-                font-size: 22px;
-            }
-            .tabs {
-                gap: 5px;
-            }
-            .tab-btn {
-                padding: 10px 15px;
-                font-size: 13px;
-            }
-            .data-table {
-                font-size: 12px;
-            }
-            .data-table thead th,
-            .data-table tbody td {
-                padding: 10px;
-            }
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .admin-header { flex-direction: column; text-align: center; }
+            .admin-header .title-section h1 { font-size: 22px; }
+            .tabs { gap: 5px; }
+            .tab-btn { padding: 10px 15px; font-size: 13px; }
+            .data-table { font-size: 12px; }
+            .data-table thead th, .data-table tbody td { padding: 10px; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .toast-container { left: 10px; right: 10px; }
+            .toast { max-width: 100%; }
         }
     </style>
 </head>
 <body>
-    <!-- Background -->
     <div class="aurora aurora-1"></div>
     <div class="aurora aurora-2"></div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
     
     <!-- Login Overlay -->
     <div class="login-overlay" id="loginOverlay">
@@ -625,7 +461,6 @@
     
     <!-- Main Content -->
     <div class="container" id="mainContent" style="display:none;">
-        <!-- Header -->
         <div class="admin-header">
             <div class="title-section">
                 <h1><i class="fas fa-crown"></i> Admin Control Panel</h1>
@@ -633,9 +468,6 @@
             </div>
             <div class="header-actions">
                 <span class="last-login" id="lastLogin"></span>
-                <button class="btn btn-outline btn-small" onclick="exportData()">
-                    <i class="fas fa-download"></i> Export
-                </button>
                 <button class="btn btn-outline btn-small" onclick="refreshData()">
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
@@ -645,13 +477,7 @@
             </div>
         </div>
         
-        <!-- Alert Messages -->
-        <div class="alert alert-success" id="alertSuccess"></div>
-        <div class="alert alert-error" id="alertError"></div>
-        <div class="alert alert-info" id="alertInfo"></div>
-        
-        <!-- Stats Row -->
-        <div class="stats-row" id="statsRow">
+        <div class="stats-row">
             <div class="stat-mini-card">
                 <div class="stat-icon">👨‍🎓</div>
                 <div class="stat-number" id="totalStudents">0</div>
@@ -674,7 +500,6 @@
             </div>
         </div>
         
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('dashboard')">
                 <i class="fas fa-th-large"></i> Dashboard
@@ -692,9 +517,6 @@
             </button>
             <button class="tab-btn" onclick="switchTab('addTeacher')">
                 <i class="fas fa-user-plus"></i> Add Teacher
-            </button>
-            <button class="tab-btn" onclick="switchTab('settings')">
-                <i class="fas fa-cog"></i> Settings
             </button>
         </div>
         
@@ -719,24 +541,10 @@
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
-                            <tr>
-                                <th>Photo</th>
-                                <th>Name</th>
-                                <th>Class</th>
-                                <th>Phone</th>
-                                <th>Joining Date</th>
-                                <th>Actions</th>
-                            </tr>
+                            <tr><th>Photo</th><th>Name</th><th>Class</th><th>Phone</th><th>Joining Date</th><th>Actions</th></tr>
                         </thead>
                         <tbody id="studentsTableBody">
-                            <tr>
-                                <td colspan="6">
-                                    <div class="empty-state">
-                                        <i class="fas fa-user-slash"></i>
-                                        <p>No students added yet</p>
-                                    </div>
-                                </td>
-                            </tr>
+                            <tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No students added yet</p></div></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -754,23 +562,10 @@
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
-                            <tr>
-                                <th>Photo</th>
-                                <th>Name</th>
-                                <th>Subject</th>
-                                <th>Expertise</th>
-                                <th>Actions</th>
-                            </tr>
+                            <tr><th>Photo</th><th>Name</th><th>Subject</th><th>Expertise</th><th>Actions</th></tr>
                         </thead>
                         <tbody id="teachersTableBody">
-                            <tr>
-                                <td colspan="5">
-                                    <div class="empty-state">
-                                        <i class="fas fa-chalkboard"></i>
-                                        <p>No additional teachers added yet</p>
-                                    </div>
-                                </td>
-                            </tr>
+                            <tr><td colspan="5"><div class="empty-state"><i class="fas fa-chalkboard"></i><p>No additional teachers added yet</p></div></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -806,26 +601,30 @@
                             <input type="date" id="sDate" required>
                         </div>
                         <div class="form-group">
-                            <label>🖼 Small Photo (Circle thumbnail)</label>
-                            <input type="file" id="sPhotoSmall" accept="image/*" onchange="previewPhoto('sPhotoSmall', 'previewSmall')">
-                            <div class="photo-preview-box small" style="margin-top:10px;">
-                                <img id="previewSmall" src="" alt="Small" style="display:none;">
-                                <span id="noSmallPreview">📷</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>🖼 Large Photo (Full size)</label>
-                            <input type="file" id="sPhotoLarge" accept="image/*" onchange="previewPhoto('sPhotoLarge', 'previewLarge')">
-                            <div class="photo-preview-box" style="margin-top:10px;">
-                                <img id="previewLarge" src="" alt="Large" style="display:none;">
-                                <span id="noLargePreview">📷</span>
+                            <label>🖼 Student Photo</label>
+                            <input type="file" id="sPhoto" accept="image/*" onchange="previewStudentPhoto()">
+                            <div style="display:flex; gap:15px; margin-top:10px; align-items:center;">
+                                <div>
+                                    <small style="opacity:0.6;">Small</small>
+                                    <div class="photo-preview-box small">
+                                        <img id="previewSmall" src="" alt="Small" style="display:none;">
+                                        <span id="noSmallPreview">📷</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small style="opacity:0.6;">Large</small>
+                                    <div class="photo-preview-box">
+                                        <img id="previewLarge" src="" alt="Large" style="display:none;">
+                                        <span id="noLargePreview">📷</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <button type="submit" class="btn" style="margin-top:20px;">
                         <i class="fas fa-save"></i> Save Student
                     </button>
-                    <button type="button" class="btn btn-outline" style="margin-top:20px; margin-left:10px;" onclick="document.getElementById('studentForm').reset(); document.getElementById('previewSmall').style.display='none'; document.getElementById('previewLarge').style.display='none'; document.getElementById('noSmallPreview').style.display='block'; document.getElementById('noLargePreview').style.display='block';">
+                    <button type="button" class="btn btn-outline" style="margin-top:20px; margin-left:10px;" onclick="resetStudentForm()">
                         <i class="fas fa-redo"></i> Reset
                     </button>
                 </form>
@@ -852,7 +651,7 @@
                         </div>
                         <div class="form-group">
                             <label>🖼 Teacher Photo</label>
-                            <input type="file" id="tPhoto" accept="image/*" onchange="previewPhoto('tPhoto', 'previewTeacher')">
+                            <input type="file" id="tPhoto" accept="image/*" onchange="previewPhoto('tPhoto', 'previewTeacher', 'noTeacherPreview')">
                             <div class="photo-preview-box" style="margin-top:10px;">
                                 <img id="previewTeacher" src="" alt="Teacher" style="display:none;">
                                 <span id="noTeacherPreview">📷</span>
@@ -862,97 +661,68 @@
                     <button type="submit" class="btn" style="margin-top:20px;">
                         <i class="fas fa-save"></i> Save Teacher
                     </button>
-                    <button type="button" class="btn btn-outline" style="margin-top:20px; margin-left:10px;" onclick="document.getElementById('teacherForm').reset(); document.getElementById('previewTeacher').style.display='none'; document.getElementById('noTeacherPreview').style.display='block';">
+                    <button type="button" class="btn btn-outline" style="margin-top:20px; margin-left:10px;" onclick="resetTeacherForm()">
                         <i class="fas fa-redo"></i> Reset
                     </button>
                 </form>
             </div>
         </div>
-        
-        <!-- Settings Panel -->
-        <div class="panel" id="panel-settings">
-            <div class="card">
-                <h2><i class="fas fa-shield-alt"></i> Security Settings</h2>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Change Admin Password</label>
-                        <input type="password" id="newPassword" placeholder="New password">
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
-                    </div>
-                </div>
-                <button class="btn" onclick="changePassword()" style="margin-top:20px;">
-                    <i class="fas fa-key"></i> Update Password
-                </button>
-            </div>
-            
-            <div class="card">
-                <h2><i class="fas fa-database"></i> Data Management</h2>
-                <p style="opacity:0.7; margin-bottom:20px;">Manage your stored data</p>
-                <button class="btn btn-warning" onclick="exportData()">
-                    <i class="fas fa-download"></i> Export All Data
-                </button>
-                <button class="btn btn-danger" onclick="clearAllData()" style="margin-left:10px;">
-                    <i class="fas fa-trash-alt"></i> Clear All Data
-                </button>
-            </div>
-            
-            <div class="card">
-                <h2><i class="fas fa-info-circle"></i> About</h2>
-                <p style="opacity:0.7;">Amar Education Cafe Admin Panel v1.0</p>
-                <p style="opacity:0.5; font-size:13px;">Built for managing students and teachers efficiently.</p>
-            </div>
+    </div>
+    
+    <!-- Logout Confirmation Modal -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal">
+            <h3>🚪 Confirm Logout</h3>
+            <p>Are you sure you want to logout from the admin panel?</p>
+            <button class="btn btn-danger" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Yes, Logout
+            </button>
+            <button class="btn btn-outline" onclick="closeModal('logoutModal')">
+                <i class="fas fa-times"></i> Cancel
+            </button>
         </div>
-        
-        <!-- Logout Confirmation Modal -->
-        <div class="modal-overlay" id="logoutModal">
-            <div class="modal">
-                <h3>🚪 Confirm Logout</h3>
-                <p>Are you sure you want to logout from the admin panel?</p>
-                <button class="btn btn-danger" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Yes, Logout
-                </button>
-                <button class="btn btn-outline" onclick="closeModal('logoutModal')" style="margin-left:10px;">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <h3 id="deleteModalTitle">⚠️ Confirm Delete</h3>
+            <p id="deleteModalMsg">Are you sure you want to delete this item?</p>
+            <button class="btn btn-danger" id="deleteConfirmBtn">
+                <i class="fas fa-trash-alt"></i> Yes, Delete
+            </button>
+            <button class="btn btn-outline" onclick="closeModal('deleteModal')">
+                <i class="fas fa-times"></i> Cancel
+            </button>
         </div>
-        
-        <!-- Clear Data Confirmation Modal -->
-        <div class="modal-overlay" id="clearDataModal">
-            <div class="modal">
-                <h3>⚠️ Clear All Data</h3>
-                <p>This will permanently delete all students and teachers data. This action cannot be undone!</p>
-                <button class="btn btn-danger" onclick="clearAllDataConfirm()">
-                    <i class="fas fa-trash-alt"></i> Yes, Delete Everything
-                </button>
-                <button class="btn btn-outline" onclick="closeModal('clearDataModal')" style="margin-left:10px;">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
+    </div>
+    
+    <!-- Session Expired Modal -->
+    <div class="modal-overlay" id="sessionModal">
+        <div class="modal">
+            <h3>⏰ Session Expired</h3>
+            <p>Your session has expired. Please login again to continue.</p>
+            <button class="btn" onclick="location.reload()">
+                <i class="fas fa-sign-in-alt"></i> Login Again
+            </button>
         </div>
     </div>
 
     <script>
-        // ====== CONFIGURATION ======
-        const ADMIN_PASSWORD = "amar123"; // Default password (change in settings)
+        const ADMIN_PASSWORD = "amar123";
         const MAX_LOGIN_ATTEMPTS = 5;
-        const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+        const LOCKOUT_TIME = 15 * 60 * 1000;
         
-        // ====== LOAD DATA ======
         let students = JSON.parse(localStorage.getItem('aec_students') || '[]');
         let teachers = JSON.parse(localStorage.getItem('aec_teachers') || '[]');
         let loginAttempts = JSON.parse(localStorage.getItem('aec_login_attempts') || '{"count":0,"lastAttempt":0}');
         let currentPassword = localStorage.getItem('aec_admin_password') || ADMIN_PASSWORD;
+        let deleteCallback = null;
         
-        // ====== INITIALIZATION ======
         function init() {
-            // Check if already logged in
             const loggedIn = sessionStorage.getItem('aec_admin_session');
             const loginTime = sessionStorage.getItem('aec_login_time');
-            const sessionTimeout = 30 * 60 * 1000; // 30 minutes
+            const sessionTimeout = 30 * 60 * 1000;
             
             if (loggedIn === 'true' && loginTime) {
                 const elapsed = Date.now() - parseInt(loginTime);
@@ -961,35 +731,39 @@
                     updateLastLogin();
                     return;
                 } else {
-                    // Session expired
                     sessionStorage.removeItem('aec_admin_session');
                     sessionStorage.removeItem('aec_login_time');
                 }
             }
             
-            // Check lockout
             if (loginAttempts.count >= MAX_LOGIN_ATTEMPTS) {
                 const lockoutRemaining = LOCKOUT_TIME - (Date.now() - loginAttempts.lastAttempt);
                 if (lockoutRemaining > 0) {
                     const minutes = Math.ceil(lockoutRemaining / 60000);
-                    document.getElementById('loginError').textContent = 
-                        `🔒 Too many attempts! Try again in ${minutes} minutes.`;
+                    document.getElementById('loginError').textContent = `🔒 Too many attempts! Try again in ${minutes} minutes.`;
                     document.getElementById('loginError').style.display = 'block';
                     document.getElementById('adminPassword').disabled = true;
                 } else {
-                    // Reset lockout
                     loginAttempts = {count: 0, lastAttempt: 0};
                     localStorage.setItem('aec_login_attempts', JSON.stringify(loginAttempts));
                 }
             }
         }
         
-        // ====== PASSWORD VERIFICATION ======
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            toast.innerHTML = `<span>${icons[type]}</span> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 4000);
+        }
+        
         function verifyPassword() {
             const password = document.getElementById('adminPassword').value;
             const errorMsg = document.getElementById('loginError');
             
-            // Check lockout
             if (loginAttempts.count >= MAX_LOGIN_ATTEMPTS) {
                 const lockoutRemaining = LOCKOUT_TIME - (Date.now() - loginAttempts.lastAttempt);
                 if (lockoutRemaining > 0) {
@@ -1000,54 +774,33 @@
                 }
             }
             
-            // Verify password
             if (password === currentPassword) {
-                // Success - create session
                 sessionStorage.setItem('aec_admin_session', 'true');
                 sessionStorage.setItem('aec_login_time', Date.now().toString());
-                
-                // Reset attempts
                 loginAttempts = {count: 0, lastAttempt: 0};
                 localStorage.setItem('aec_login_attempts', JSON.stringify(loginAttempts));
-                
-                // Store login time
                 localStorage.setItem('aec_last_login', new Date().toLocaleString());
-                
                 showMainContent();
                 updateLastLogin();
+                showToast('Welcome back! Access granted.', 'success');
             } else {
-                // Failed attempt
                 loginAttempts.count++;
                 loginAttempts.lastAttempt = Date.now();
                 localStorage.setItem('aec_login_attempts', JSON.stringify(loginAttempts));
-                
                 const remaining = MAX_LOGIN_ATTEMPTS - loginAttempts.count;
                 errorMsg.textContent = `❌ Wrong password! ${remaining} attempts left.`;
                 errorMsg.style.display = 'block';
                 document.getElementById('adminPassword').value = '';
                 document.getElementById('adminPassword').focus();
-                
-                // Shake animation
                 document.querySelector('.login-box').style.animation = 'shake 0.5s ease';
-                setTimeout(() => {
-                    document.querySelector('.login-box').style.animation = '';
-                }, 500);
+                setTimeout(() => { document.querySelector('.login-box').style.animation = ''; }, 500);
             }
         }
         
-        // Add shake keyframes
         const shakeStyle = document.createElement('style');
-        shakeStyle.textContent = `
-            @keyframes shake {
-                0%,100% { transform: translateX(0); }
-                25% { transform: translateX(-10px); }
-                50% { transform: translateX(10px); }
-                75% { transform: translateX(-10px); }
-            }
-        `;
+        shakeStyle.textContent = `@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }`;
         document.head.appendChild(shakeStyle);
         
-        // ====== SHOW MAIN CONTENT ======
         function showMainContent() {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
@@ -1057,11 +810,10 @@
         function updateLastLogin() {
             const lastLogin = localStorage.getItem('aec_last_login');
             if (lastLogin) {
-                document.getElementById('lastLogin').textContent = 'Last login: ' + lastLogin;
+                document.getElementById('lastLogin').textContent = 'Last: ' + lastLogin;
             }
         }
         
-        // ====== REFRESH ALL DATA ======
         function refreshAll() {
             displayStudents();
             displayTeachers();
@@ -1073,27 +825,20 @@
             students = JSON.parse(localStorage.getItem('aec_students') || '[]');
             teachers = JSON.parse(localStorage.getItem('aec_teachers') || '[]');
             refreshAll();
-            showAlert('success', '✅ Data refreshed successfully!');
+            showToast('Data refreshed successfully!', 'info');
         }
         
-        // ====== UPDATE STATS ======
         function updateStats() {
             document.getElementById('totalStudents').textContent = students.length;
             document.getElementById('totalTeachers').textContent = teachers.length;
-            
-            // Today's joining
             const today = new Date().toISOString().split('T')[0];
-            const todayCount = students.filter(s => s.joiningDate === today).length;
-            document.getElementById('todayJoining').textContent = todayCount;
-            
-            // This month
+            document.getElementById('todayJoining').textContent = students.filter(s => s.joiningDate === today).length;
             const thisMonth = new Date().getMonth();
             const thisYear = new Date().getFullYear();
-            const monthCount = students.filter(s => {
+            document.getElementById('thisMonth').textContent = students.filter(s => {
                 const d = new Date(s.joiningDate);
                 return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
             }).length;
-            document.getElementById('thisMonth').textContent = monthCount;
         }
         
         function updateCounts() {
@@ -1101,172 +846,130 @@
             document.getElementById('teacherCount').textContent = teachers.length;
         }
         
-        // ====== DISPLAY STUDENTS ======
         function displayStudents(filter = '') {
             const tbody = document.getElementById('studentsTableBody');
-            let filteredStudents = students;
+            let filtered = filter ? students.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.class.toLowerCase().includes(filter.toLowerCase()) || s.phone.includes(filter)) : students;
             
-            if (filter) {
-                filteredStudents = students.filter(s => 
-                    s.name.toLowerCase().includes(filter.toLowerCase()) ||
-                    s.class.toLowerCase().includes(filter.toLowerCase()) ||
-                    s.phone.includes(filter)
-                );
-            }
-            
-            if (filteredStudents.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <i class="fas fa-search"></i>
-                                <p>${filter ? 'No matching students found' : 'No students added yet'}</p>
-                            </div>
-                        </td>
-                    </tr>`;
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-search"></i><p>${filter ? 'No matching students' : 'No students added yet'}</p></div></td></tr>`;
                 return;
             }
             
-            tbody.innerHTML = filteredStudents.map((s, i) => `
+            tbody.innerHTML = filtered.map(s => `
                 <tr>
-                    <td>
-                        ${s.photoSmall ? 
-                            `<img src="${s.photoSmall}" class="student-photo" alt="${s.name}">` :
-                            `<div class="no-photo">${s.name[0].toUpperCase()}</div>`
-                        }
-                    </td>
+                    <td>${s.photoSmall ? `<img src="${s.photoSmall}" class="student-photo" alt="${s.name}">` : `<div class="no-photo">${s.name[0].toUpperCase()}</div>`}</td>
                     <td><strong>${s.name}</strong></td>
                     <td>Class ${s.class}</td>
                     <td>${s.phone}</td>
                     <td>${s.joiningDate}</td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="btn btn-small" onclick="viewStudent(${students.indexOf(s)})" title="View">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-danger btn-small" onclick="deleteStudent(${students.indexOf(s)})" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
+                    <td><div class="action-btns"><button class="btn btn-danger btn-small" onclick="confirmDeleteStudent(${students.indexOf(s)})"><i class="fas fa-trash"></i></button></div></td>
                 </tr>
             `).join('');
         }
         
-        function filterStudents() {
-            const query = document.getElementById('studentSearch').value;
-            displayStudents(query);
-        }
+        function filterStudents() { displayStudents(document.getElementById('studentSearch').value); }
         
-        // ====== DISPLAY TEACHERS ======
         function displayTeachers(filter = '') {
             const tbody = document.getElementById('teachersTableBody');
-            let filteredTeachers = teachers;
+            let filtered = filter ? teachers.filter(t => t.name.toLowerCase().includes(filter.toLowerCase()) || t.subject.toLowerCase().includes(filter.toLowerCase()) || t.expertise.toLowerCase().includes(filter.toLowerCase())) : teachers;
             
-            if (filter) {
-                filteredTeachers = teachers.filter(t => 
-                    t.name.toLowerCase().includes(filter.toLowerCase()) ||
-                    t.subject.toLowerCase().includes(filter.toLowerCase()) ||
-                    t.expertise.toLowerCase().includes(filter.toLowerCase())
-                );
-            }
-            
-            if (filteredTeachers.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            <div class="empty-state">
-                                <i class="fas fa-search"></i>
-                                <p>${filter ? 'No matching teachers found' : 'No additional teachers added yet'}</p>
-                            </div>
-                        </td>
-                    </tr>`;
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fas fa-search"></i><p>${filter ? 'No matching teachers' : 'No additional teachers added yet'}</p></div></td></tr>`;
                 return;
             }
             
-            tbody.innerHTML = filteredTeachers.map((t, i) => `
+            tbody.innerHTML = filtered.map(t => `
                 <tr>
-                    <td>
-                        ${t.photo ? 
-                            `<img src="${t.photo}" class="student-photo" alt="${t.name}">` :
-                            `<div class="no-photo">${t.name[0].toUpperCase()}</div>`
-                        }
-                    </td>
+                    <td>${t.photo ? `<img src="${t.photo}" class="student-photo" alt="${t.name}">` : `<div class="no-photo">${t.name[0].toUpperCase()}</div>`}</td>
                     <td><strong>${t.name}</strong></td>
                     <td>${t.subject}</td>
                     <td>${t.expertise}</td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="btn btn-small" onclick="viewTeacher(${teachers.indexOf(t)})" title="View">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-danger btn-small" onclick="deleteTeacher(${teachers.indexOf(t)})" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
+                    <td><div class="action-btns"><button class="btn btn-danger btn-small" onclick="confirmDeleteTeacher(${teachers.indexOf(t)})"><i class="fas fa-trash"></i></button></div></td>
                 </tr>
             `).join('');
         }
         
-        function filterTeachers() {
-            const query = document.getElementById('teacherSearch').value;
-            displayTeachers(query);
+        function filterTeachers() { displayTeachers(document.getElementById('teacherSearch').value); }
+        
+        function previewStudentPhoto() {
+            const file = document.getElementById('sPhoto').files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast('Image too large! Max 2MB.', 'error'); document.getElementById('sPhoto').value = ''; return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const src = e.target.result;
+                ['previewSmall', 'previewLarge'].forEach(id => {
+                    document.getElementById(id).src = src;
+                    document.getElementById(id).style.display = 'block';
+                });
+                document.getElementById('noSmallPreview').style.display = 'none';
+                document.getElementById('noLargePreview').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
         }
         
-        // ====== ADD STUDENT ======
+        function previewPhoto(inputId, previewId, placeholderId) {
+            const file = document.getElementById(inputId).files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast('Image too large! Max 2MB.', 'error'); document.getElementById(inputId).value = ''; return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById(previewId).src = e.target.result;
+                document.getElementById(previewId).style.display = 'block';
+                document.getElementById(placeholderId).style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function resetStudentForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('previewSmall').style.display = 'none';
+            document.getElementById('previewLarge').style.display = 'none';
+            document.getElementById('noSmallPreview').style.display = 'block';
+            document.getElementById('noLargePreview').style.display = 'block';
+        }
+        
+        function resetTeacherForm() {
+            document.getElementById('teacherForm').reset();
+            document.getElementById('previewTeacher').style.display = 'none';
+            document.getElementById('noTeacherPreview').style.display = 'block';
+        }
+        
         function addStudent(e) {
             e.preventDefault();
-            
-            const smallPhoto = document.getElementById('previewSmall').src || '';
-            const largePhoto = document.getElementById('previewLarge').src || '';
-            
+            const photoSrc = document.getElementById('previewLarge').src || '';
             const student = {
                 id: Date.now(),
                 name: document.getElementById('sName').value.trim(),
                 class: document.getElementById('sClass').value,
                 phone: document.getElementById('sPhone').value.trim(),
                 joiningDate: document.getElementById('sDate').value,
-                photoSmall: smallPhoto,
-                photoLarge: largePhoto,
+                photoSmall: photoSrc,
+                photoLarge: photoSrc,
                 addedAt: new Date().toISOString()
             };
             
-            // Validation
             if (!student.name || !student.class || !student.phone || !student.joiningDate) {
-                showAlert('error', '❌ Please fill all required fields!');
+                showToast('Please fill all required fields!', 'error');
                 return;
             }
-            
             if (student.phone.length < 10) {
-                showAlert('error', '❌ Please enter a valid phone number!');
+                showToast('Please enter a valid phone number!', 'error');
                 return;
             }
             
-            students.unshift(student); // Add to beginning
+            students.unshift(student);
             localStorage.setItem('aec_students', JSON.stringify(students));
-            
-            // Reset form
-            document.getElementById('studentForm').reset();
-            document.getElementById('previewSmall').style.display = 'none';
-            document.getElementById('previewLarge').style.display = 'none';
-            document.getElementById('noSmallPreview').style.display = 'block';
-            document.getElementById('noLargePreview').style.display = 'block';
-            
+            resetStudentForm();
             refreshAll();
             switchTab('students');
-            showAlert('success', `✅ Student "${student.name}" added successfully!`);
-            
-            // Add to activities
+            showToast(`Student "${student.name}" added successfully!`, 'success');
             addActivity('student_added', `New student ${student.name} (Class ${student.class}) registered`);
         }
         
-        // ====== ADD TEACHER ======
         function addTeacher(e) {
             e.preventDefault();
-            
             const teacherPhoto = document.getElementById('previewTeacher').src || '';
-            
             const teacher = {
                 id: Date.now(),
                 name: document.getElementById('tName').value.trim(),
@@ -1276,233 +979,83 @@
                 addedAt: new Date().toISOString()
             };
             
-            // Validation
             if (!teacher.name || !teacher.subject || !teacher.expertise) {
-                showAlert('error', '❌ Please fill all required fields!');
+                showToast('Please fill all required fields!', 'error');
                 return;
             }
             
             teachers.unshift(teacher);
             localStorage.setItem('aec_teachers', JSON.stringify(teachers));
-            
-            // Reset form
-            document.getElementById('teacherForm').reset();
-            document.getElementById('previewTeacher').style.display = 'none';
-            document.getElementById('noTeacherPreview').style.display = 'block';
-            
+            resetTeacherForm();
             refreshAll();
             switchTab('teachers');
-            showAlert('success', `✅ Teacher "${teacher.name}" added successfully! Will appear on website after refresh.`);
-            
-            // Add to activities
+            showToast(`Teacher "${teacher.name}" added! Refresh website to see.`, 'success');
             addActivity('teacher_added', `New teacher ${teacher.name} (${teacher.subject}) added`);
         }
         
-        // ====== DELETE FUNCTIONS ======
-        function deleteStudent(index) {
-            const student = students[index];
-            if (confirm(`Are you sure you want to delete "${student.name}"?\nThis action cannot be undone!`)) {
+        function confirmDeleteStudent(index) {
+            const s = students[index];
+            document.getElementById('deleteModalTitle').textContent = '⚠️ Delete Student';
+            document.getElementById('deleteModalMsg').textContent = `Are you sure you want to delete "${s.name}" (Class ${s.class})?\n\nThis action cannot be undone!`;
+            document.getElementById('deleteConfirmBtn').onclick = () => {
                 students.splice(index, 1);
                 localStorage.setItem('aec_students', JSON.stringify(students));
                 refreshAll();
-                showAlert('success', `✅ Student "${student.name}" deleted successfully!`);
-                addActivity('student_deleted', `Student ${student.name} removed`);
-            }
+                closeModal('deleteModal');
+                showToast(`Student "${s.name}" deleted!`, 'info');
+                addActivity('student_deleted', `Student ${s.name} removed`);
+            };
+            document.getElementById('deleteModal').style.display = 'flex';
         }
         
-        function deleteTeacher(index) {
-            const teacher = teachers[index];
-            if (confirm(`Are you sure you want to delete "${teacher.name}"?\nThis action cannot be undone!`)) {
+        function confirmDeleteTeacher(index) {
+            const t = teachers[index];
+            document.getElementById('deleteModalTitle').textContent = '⚠️ Delete Teacher';
+            document.getElementById('deleteModalMsg').textContent = `Are you sure you want to delete "${t.name}" (${t.subject})?\n\nThis action cannot be undone!`;
+            document.getElementById('deleteConfirmBtn').onclick = () => {
                 teachers.splice(index, 1);
                 localStorage.setItem('aec_teachers', JSON.stringify(teachers));
                 refreshAll();
-                showAlert('success', `✅ Teacher "${teacher.name}" deleted successfully!`);
-                addActivity('teacher_deleted', `Teacher ${teacher.name} removed`);
-            }
+                closeModal('deleteModal');
+                showToast(`Teacher "${t.name}" deleted!`, 'info');
+                addActivity('teacher_deleted', `Teacher ${t.name} removed`);
+            };
+            document.getElementById('deleteModal').style.display = 'flex';
         }
         
-        // ====== VIEW FUNCTIONS ======
-        function viewStudent(index) {
-            const s = students[index];
-            alert(`📋 Student Details\n\n👤 Name: ${s.name}\n🏫 Class: ${s.class}\n📱 Phone: ${s.phone}\n📅 Joined: ${s.joiningDate}`);
-        }
-        
-        function viewTeacher(index) {
-            const t = teachers[index];
-            alert(`👨‍🏫 Teacher Details\n\n👤 Name: ${t.name}\n📚 Subject: ${t.subject}\n⭐ Expertise: ${t.expertise}`);
-        }
-        
-        // ====== PHOTO PREVIEW ======
-        function previewPhoto(inputId, previewId) {
-            const file = document.getElementById(inputId).files[0];
-            if (file) {
-                // Check file size (max 2MB)
-                if (file.size > 2 * 1024 * 1024) {
-                    showAlert('error', '❌ Image size should be less than 2MB!');
-                    document.getElementById(inputId).value = '';
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.getElementById(previewId);
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    
-                    // Hide placeholder
-                    if (previewId === 'previewSmall') {
-                        document.getElementById('noSmallPreview').style.display = 'none';
-                    } else if (previewId === 'previewLarge') {
-                        document.getElementById('noLargePreview').style.display = 'none';
-                    } else if (previewId === 'previewTeacher') {
-                        document.getElementById('noTeacherPreview').style.display = 'none';
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        // ====== TAB SWITCHING ======
         function switchTab(tabName) {
-            // Update panels
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.getElementById(`panel-${tabName}`).classList.add('active');
-            
-            // Update buttons
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             event.target.closest('.tab-btn').classList.add('active');
-            
-            // Refresh relevant data
             if (tabName === 'students') displayStudents();
             if (tabName === 'teachers') displayTeachers();
-            if (tabName === 'dashboard') updateStats();
+            if (tabName === 'dashboard') { updateStats(); displayActivities(); }
         }
         
-        // ====== SETTINGS ======
-        function changePassword() {
-            const newPass = document.getElementById('newPassword').value;
-            const confirmPass = document.getElementById('confirmPassword').value;
-            
-            if (!newPass || !confirmPass) {
-                showAlert('error', '❌ Please fill both password fields!');
-                return;
-            }
-            
-            if (newPass.length < 6) {
-                showAlert('error', '❌ Password must be at least 6 characters!');
-                return;
-            }
-            
-            if (newPass !== confirmPass) {
-                showAlert('error', '❌ Passwords do not match!');
-                return;
-            }
-            
-            currentPassword = newPass;
-            localStorage.setItem('aec_admin_password', newPass);
-            
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-            
-            showAlert('success', '✅ Password updated successfully!');
-        }
-        
-        function clearAllData() {
-            document.getElementById('clearDataModal').style.display = 'flex';
-        }
-        
-        function clearAllDataConfirm() {
-            students = [];
-            teachers = [];
-            localStorage.setItem('aec_students', '[]');
-            localStorage.setItem('aec_teachers', '[]');
-            localStorage.removeItem('aec_activities');
-            
-            closeModal('clearDataModal');
-            refreshAll();
-            showAlert('info', 'ℹ️ All data has been cleared successfully!');
-        }
-        
-        // ====== EXPORT DATA ======
-        function exportData() {
-            const data = {
-                exportDate: new Date().toISOString(),
-                students: students,
-                teachers: teachers,
-                totalStudents: students.length,
-                totalTeachers: teachers.length
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `amar-education-backup-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            
-            showAlert('success', '✅ Data exported successfully!');
-        }
-        
-        // ====== ALERTS ======
-        function showAlert(type, message) {
-            const alertMap = {
-                'success': 'alertSuccess',
-                'error': 'alertError',
-                'info': 'alertInfo'
-            };
-            
-            const alertEl = document.getElementById(alertMap[type]);
-            if (alertEl) {
-                alertEl.textContent = message;
-                alertEl.style.display = 'block';
-                
-                setTimeout(() => {
-                    alertEl.style.display = 'none';
-                }, 4000);
-            }
-        }
-        
-        // ====== ACTIVITY LOG ======
         function addActivity(type, message) {
             let activities = JSON.parse(localStorage.getItem('aec_activities') || '[]');
-            activities.unshift({
-                type: type,
-                message: message,
-                time: new Date().toLocaleString()
-            });
-            
-            // Keep only last 20 activities
+            activities.unshift({ type, message, time: new Date().toLocaleString() });
             if (activities.length > 20) activities = activities.slice(0, 20);
-            
             localStorage.setItem('aec_activities', JSON.stringify(activities));
-            
-            // Update dashboard if visible
-            if (document.getElementById('panel-dashboard').classList.contains('active')) {
-                displayActivities();
-            }
+            if (document.getElementById('panel-dashboard').classList.contains('active')) displayActivities();
         }
         
         function displayActivities() {
             const activities = JSON.parse(localStorage.getItem('aec_activities') || '[]');
             const container = document.getElementById('recentActivities');
-            
             if (activities.length === 0) {
                 container.innerHTML = '<p style="opacity:0.5;">No recent activities to show.</p>';
                 return;
             }
-            
             container.innerHTML = activities.map(a => `
-                <div style="padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                    <span>
-                        ${a.type === 'student_added' ? '🟢' : a.type === 'student_deleted' ? '🔴' : a.type === 'teacher_added' ? '🟡' : '⚪'}
-                        ${a.message}
-                    </span>
+                <div style="padding:12px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                    <span>${a.type === 'student_added' ? '🟢' : a.type === 'student_deleted' ? '🔴' : a.type === 'teacher_added' ? '🟡' : '⚪'} ${a.message}</span>
                     <span style="opacity:0.5; font-size:12px;">${a.time}</span>
                 </div>
             `).join('');
         }
         
-        // ====== MODAL FUNCTIONS ======
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
@@ -1511,50 +1064,39 @@
             document.getElementById('logoutModal').style.display = 'flex';
         }
         
-        // ====== LOGOUT ======
         function logout() {
             sessionStorage.removeItem('aec_admin_session');
             sessionStorage.removeItem('aec_login_time');
             closeModal('logoutModal');
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('loginOverlay').style.display = 'flex';
-            document.getElementById('adminPassword').value = '';
+            window.location.href = 'index.html';
         }
         
-        // ====== ENTER KEY FOR LOGIN ======
         document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const loginOverlay = document.getElementById('loginOverlay');
-                if (loginOverlay.style.display !== 'none') {
-                    verifyPassword();
-                }
+            if (e.key === 'Enter' && document.getElementById('loginOverlay').style.display !== 'none') {
+                verifyPassword();
             }
         });
         
-        // ====== SESSION TIMEOUT ======
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) closeModal(this.id);
+            });
+        });
+        
+        // Session timeout check
         setInterval(() => {
             const loginTime = sessionStorage.getItem('aec_login_time');
-            if (loginTime) {
-                const elapsed = Date.now() - parseInt(loginTime);
-                const sessionTimeout = 30 * 60 * 1000; // 30 minutes
-                
-                if (elapsed >= sessionTimeout) {
-                    sessionStorage.removeItem('aec_admin_session');
-                    sessionStorage.removeItem('aec_login_time');
-                    alert('⏰ Session expired! Please login again.');
-                    location.reload();
-                }
+            if (loginTime && Date.now() - parseInt(loginTime) >= 30 * 60 * 1000) {
+                sessionStorage.removeItem('aec_admin_session');
+                sessionStorage.removeItem('aec_login_time');
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('sessionModal').style.display = 'flex';
             }
-        }, 60000); // Check every minute
+        }, 60000);
         
-        // ====== INIT ======
         init();
-        
-        // Set default date to today
-        const dateInput = document.getElementById('sDate');
-        if (dateInput) {
-            dateInput.value = new Date().toISOString().split('T')[0];
-        }
+        document.getElementById('sDate').value = new Date().toISOString().split('T')[0];
     </script>
 </body>
-  </html>
+    </html>
