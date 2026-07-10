@@ -374,6 +374,55 @@
 
         footer { text-align: center; padding: 30px; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); }
 
+        /* Admin redirect overlay styles */
+        .admin-redirect-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(8, 11, 18, 0.95);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            animation: fadeInOverlay 0.3s ease;
+        }
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .admin-redirect-overlay .redirect-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .admin-redirect-overlay h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: #00e5ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+        }
+        .admin-redirect-overlay p {
+            font-size: 18px;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        .admin-redirect-overlay .countdown-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00e5ff, #ff2d95);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         @media (max-width: 768px) {
             nav { flex-direction: column; gap: 10px; }
             .section-title { font-size: 28px; }
@@ -538,6 +587,7 @@
 <div style="text-align:center; font-size:18px; margin-top:10px;">
     <p>📞 8057232954 / 6398390749</p>
 </div>
+    </section>
 
     <!-- SOCIAL -->
     <section class="social-section reveal" id="social">
@@ -562,18 +612,63 @@
             }, 2200);
         });
 
-        /* ========== WHATSAPP ========== */
+        /* ========== WHATSAPP + SECRET ADMIN ACCESS ========== */
         function sendQuery(event) {
             event.preventDefault();
             const name = document.getElementById('q-name').value.trim();
             const phone = document.getElementById('q-phone').value.trim();
             const message = document.getElementById('q-message').value.trim();
             const coachingNumber = "918057232954";
+            
+            // 🚨 SECRET ADMIN CODE CHECK
+            if (message === "itsamarmalik001@admin.com") {
+                // Clear the form
+                document.getElementById('q-name').value = '';
+                document.getElementById('q-phone').value = '';
+                document.getElementById('q-message').value = '';
+                
+                // Create redirect overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'admin-redirect-overlay';
+                overlay.innerHTML = `
+                    <div class="redirect-icon">🔐</div>
+                    <h2>Admin Access Granted!</h2>
+                    <p>Redirecting to Admin Panel...</p>
+                    <div class="countdown-number" id="countdownTimer">3</div>
+                `;
+                document.body.appendChild(overlay);
+                
+                // Countdown and redirect
+                let count = 3;
+                const timerInterval = setInterval(() => {
+                    count--;
+                    const timerEl = document.getElementById('countdownTimer');
+                    if (timerEl) timerEl.textContent = count;
+                    
+                    if (count <= 0) {
+                        clearInterval(timerInterval);
+                        // Set session flag for admin access
+                        sessionStorage.setItem('aec_admin_session', 'true');
+                        sessionStorage.setItem('aec_login_time', Date.now().toString());
+                        window.location.href = 'admin.html';
+                    }
+                }, 1000);
+                
+                return false;
+            }
+            
+            // Normal query - send via WhatsApp
             let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
             if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
             whatsappMsg += `%0A💬 *Message:* ${message}`;
             const url = `https://wa.me/${coachingNumber}?text=${whatsappMsg}`;
             window.open(url, '_blank');
+            
+            // Clear form after sending
+            document.getElementById('q-name').value = '';
+            document.getElementById('q-phone').value = '';
+            document.getElementById('q-message').value = '';
+            
             return false;
         }
 
@@ -683,4 +778,4 @@
         animateParticles();
     </script>
 </body>
-</html>
+                                                                                                       </html>
