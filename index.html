@@ -216,13 +216,13 @@
             margin: 15px auto 0; border-radius: 2px;
         }
 
-        /* ===== TOP SLIDER (16:9) – shifted down ===== */
+        /* ===== TOP SLIDER (16:9) ===== */
         .top-slider {
             margin-top: 100px;
             padding-top: 20px;
             width: 100%;
             position: relative;
-            padding-bottom: 56.25%;     /* 16:9 */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             background: #111;
@@ -248,7 +248,7 @@
             95%,100% { transform: translateX(0); }
         }
 
-        /* ===== TOPPERS SLIDER (portrait, one at a time, correct animation) ===== */
+        /* ===== TOPPERS SLIDER ===== */
         .toppers-slider-container {
             display: flex; justify-content: center;
         }
@@ -268,12 +268,12 @@
         }
         .toppers-track {
             display: flex;
-            width: 500%;                /* 5 slides */
+            width: 500%;
             height: 100%;
             animation: slideToppers 25s infinite;
         }
         .topper-slide {
-            width: 20%;                 /* 100%/5 = 20% of track = one container width */
+            width: 20%;
             height: 100%;
             background-size: contain;
             background-repeat: no-repeat;
@@ -283,7 +283,7 @@
         }
         @keyframes slideToppers {
             0%,12%   { transform: translateX(0); }
-            16%,32%  { transform: translateX(-20%); }   /* move by one container width */
+            16%,32%  { transform: translateX(-20%); }
             36%,52%  { transform: translateX(-40%); }
             56%,72%  { transform: translateX(-60%); }
             76%,92%  { transform: translateX(-80%); }
@@ -337,6 +337,17 @@
         .teacher-card:hover { transform: translateY(-8px); border-color: var(--cyan); box-shadow: 0 0 25px rgba(0, 229, 255, 0.3); }
         .teacher-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cyan); margin-bottom: 15px; }
         .teacher-card h4 { font-family: var(--heading-font); font-size: 20px; color: var(--cyan); margin-bottom: 5px; }
+        .teacher-placeholder {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: rgba(0, 229, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            margin: 0 auto 15px;
+            border: 3px solid var(--cyan);
+        }
 
         .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .testimonial-card {
@@ -525,18 +536,12 @@
     <!-- TEACHERS -->
     <section id="teachers" class="reveal">
         <h2 class="section-title">Know Your Teachers</h2>
-        <div class="teachers-grid">
-            <div class="teacher-card"><img src="images/amarpal-sir.jpg" alt="AmarPal Sir"><h4>AmarPal Sir</h4><p>Mathematics Specialist</p></div>
-            <div class="teacher-card"><img src="images/arvind-sir.jpg" alt="Arvind Sir"><h4>Arvind Sir</h4><p>Physics Expert</p></div>
-            <div class="teacher-card"><img src="images/pk-sir.jpg" alt="P.K. Sir"><h4>P.K. Sir</h4><p>Chemistry Expert</p></div>
-            <div class="teacher-card"><img src="images/tarun-sir.jpg" alt="Tarun Sir"><h4>Tarun Sir</h4><p>Biology Expert</p></div>
-            <div class="teacher-card"><img src="images/dheeraj-sir.jpg" alt="Dheeraj Sir"><h4>Dheeraj Sir</h4><p>English Expert</p></div>
-            <div class="teacher-card"><img src="images/komal-mam.jpg" alt="Komal Mam"><h4>Komal Mam</h4><p>Math Expert</p></div>
-            <div class="teacher-card"><img src="images/pradeep-sir.jpg" alt="Pradeep Sir"><h4>Pradeep Sir</h4><p>Bio Expert</p></div>
+        <div class="teachers-grid" id="teachersContainer">
+            <!-- Teachers yahan dynamically load honge -->
         </div>
     </section>
 
-    <!-- ===== TOPPERS (ONE AT A TIME, WIDER, CORRECT ANIMATION) ===== -->
+    <!-- TOPPERS -->
     <section id="toppers" class="reveal">
         <h2 class="section-title">Our Toppers</h2>
         <div class="toppers-slider-container">
@@ -573,12 +578,10 @@
             <button type="submit" class="btn">Send Query on WhatsApp</button>
         </form>
 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top:30px; font-size:16px; flex-wrap: wrap;">
-    <!-- Left: First Branch -->
     <div style="flex: 1; min-width: 200px; padding: 10px;">
         <h4 style="color: var(--cyan); margin-bottom: 5px;">Our First Branch</h4>
         <p>📍 Parsaul, Greater Noida</p>
     </div>
-    <!-- Right: Second Branch -->
     <div style="flex: 1; min-width: 200px; padding: 10px; text-align: right;">
         <h4 style="color: var(--cyan); margin-bottom: 5px;">Our Second Branch</h4>
         <p>📍 71Villa, 7th Park View, Yamuna Gaur City, Greater Noida</p>
@@ -605,12 +608,70 @@
     </footer>
 
     <script>
+        /* ========== LOAD TEACHERS FROM ADMIN PANEL ========== */
+        function loadAllTeachers() {
+            const container = document.getElementById('teachersContainer');
+            const adminTeachers = JSON.parse(localStorage.getItem('aec_teachers') || '[]');
+            
+            // Default hardcoded teachers (yeh hamesha rahenge)
+            const defaultTeachers = [
+                { name: 'AmarPal Sir', expertise: 'Mathematics Specialist', photo: 'images/amarpal-sir.jpg' },
+                { name: 'Arvind Sir', expertise: 'Physics Expert', photo: 'images/arvind-sir.jpg' },
+                { name: 'P.K. Sir', expertise: 'Chemistry Expert', photo: 'images/pk-sir.jpg' },
+                { name: 'Tarun Sir', expertise: 'Biology Expert', photo: 'images/tarun-sir.jpg' },
+                { name: 'Dheeraj Sir', expertise: 'English Expert', photo: 'images/dheeraj-sir.jpg' },
+                { name: 'Komal Mam', expertise: 'Math Expert', photo: 'images/komal-mam.jpg' },
+                { name: 'Pradeep Sir', expertise: 'Bio Expert', photo: 'images/pradeep-sir.jpg' }
+            ];
+            
+            let allTeachersHTML = '';
+            
+            // Default teachers
+            defaultTeachers.forEach(t => {
+                allTeachersHTML += `
+                    <div class="teacher-card">
+                        <img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="teacher-placeholder" style="display:none;">👨‍🏫</div>
+                        <h4>${t.name}</h4>
+                        <p>${t.expertise}</p>
+                    </div>
+                `;
+            });
+            
+            // Admin se add kiye gaye teachers
+            adminTeachers.forEach(t => {
+                if (t.photo) {
+                    allTeachersHTML += `
+                        <div class="teacher-card">
+                            <img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="teacher-placeholder" style="display:none;">👨‍🏫</div>
+                            <h4>${t.name}</h4>
+                            <p>${t.expertise}</p>
+                        </div>
+                    `;
+                } else {
+                    allTeachersHTML += `
+                        <div class="teacher-card">
+                            <div class="teacher-placeholder">👨‍🏫</div>
+                            <h4>${t.name}</h4>
+                            <p>${t.expertise}</p>
+                        </div>
+                    `;
+                }
+            });
+            
+            container.innerHTML = allTeachersHTML;
+        }
+
         /* ========== LOADER ========== */
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 2200);
         });
+
+        // Page load hote hi teachers load karo
+        loadAllTeachers();
 
         /* ========== WHATSAPP + SECRET ADMIN ACCESS ========== */
         function sendQuery(event) {
@@ -622,12 +683,10 @@
             
             // 🚨 SECRET ADMIN CODE CHECK
             if (message === "itsamarmalik001@admin.com") {
-                // Clear the form
                 document.getElementById('q-name').value = '';
                 document.getElementById('q-phone').value = '';
                 document.getElementById('q-message').value = '';
                 
-                // Create redirect overlay
                 const overlay = document.createElement('div');
                 overlay.className = 'admin-redirect-overlay';
                 overlay.innerHTML = `
@@ -638,7 +697,6 @@
                 `;
                 document.body.appendChild(overlay);
                 
-                // Countdown and redirect
                 let count = 3;
                 const timerInterval = setInterval(() => {
                     count--;
@@ -647,7 +705,6 @@
                     
                     if (count <= 0) {
                         clearInterval(timerInterval);
-                        // Set session flag for admin access
                         sessionStorage.setItem('aec_admin_session', 'true');
                         sessionStorage.setItem('aec_login_time', Date.now().toString());
                         window.location.href = 'admin.html';
@@ -657,14 +714,13 @@
                 return false;
             }
             
-            // Normal query - send via WhatsApp
+            // Normal WhatsApp query
             let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
             if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
             whatsappMsg += `%0A💬 *Message:* ${message}`;
             const url = `https://wa.me/${coachingNumber}?text=${whatsappMsg}`;
             window.open(url, '_blank');
             
-            // Clear form after sending
             document.getElementById('q-name').value = '';
             document.getElementById('q-phone').value = '';
             document.getElementById('q-message').value = '';
@@ -778,4 +834,4 @@
         animateParticles();
     </script>
 </body>
-                                                                                                       </html>
+</html>
