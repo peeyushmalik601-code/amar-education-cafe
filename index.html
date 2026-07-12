@@ -35,7 +35,6 @@
             cursor: none;
         }
 
-        /* ===== PARTICLE CANVAS ===== */
         #particleCanvas {
             position: fixed;
             top: 0; left: 0;
@@ -149,13 +148,6 @@
             body { cursor: auto; }
         }
 
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur));
-            -webkit-backdrop-filter: blur(var(--blur));
-            border: 1px solid var(--glass-border);
-        }
-
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 8%;
@@ -168,12 +160,43 @@
             flex-wrap: wrap;
         }
         .logo { font-family: var(--heading-font); font-size: 22px; font-weight: 700; color: var(--cyan); }
-        .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+        .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; align-items: center; }
         .nav-links a { color: var(--text); text-decoration: none; font-size: 15px; font-weight: 500; transition: var(--transition); position: relative; }
         .nav-links a:hover { color: var(--cyan); }
         .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--cyan); transition: width 0.3s; }
         .nav-links a:hover::after { width: 100%; }
         .nav-links a.active { color: var(--cyan); }
+
+        /* Login/User Button */
+        .user-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            color: var(--text);
+        }
+        .user-btn:hover {
+            background: rgba(0, 229, 255, 0.1);
+            border-color: var(--cyan);
+        }
+        .user-btn img {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+        }
+        .admin-badge {
+            background: linear-gradient(135deg, var(--amber), #ff6d00);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #000;
+            margin-left: 5px;
+        }
 
         .btn {
             display: inline-block;
@@ -204,6 +227,11 @@
         .btn:hover::before { width: 300px; height: 300px; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 0 40px rgba(0, 229, 255, 0.5), 0 0 80px rgba(255, 45, 149, 0.3); }
 
+        .btn-admin {
+            background: linear-gradient(135deg, var(--amber), #ff6d00) !important;
+            display: none;
+        }
+
         section { padding: 100px 5%; position: relative; z-index: 10; }
         .section-title {
             font-family: var(--heading-font); text-align: center;
@@ -216,7 +244,6 @@
             margin: 15px auto 0; border-radius: 2px;
         }
 
-        /* ===== TOP SLIDER (16:9) ===== */
         .top-slider {
             margin-top: 100px;
             padding-top: 20px;
@@ -248,10 +275,7 @@
             95%,100% { transform: translateX(0); }
         }
 
-        /* ===== TOPPERS SLIDER ===== */
-        .toppers-slider-container {
-            display: flex; justify-content: center;
-        }
+        .toppers-slider-container { display: flex; justify-content: center; }
         .toppers-slider {
             width: 92vw;
             max-width: 500px;
@@ -290,7 +314,6 @@
             96%,100% { transform: translateX(0); }
         }
 
-        /* ===== HERO ===== */
         .hero {
             min-height: 80vh;
             display: flex; flex-direction: column;
@@ -337,17 +360,6 @@
         .teacher-card:hover { transform: translateY(-8px); border-color: var(--cyan); box-shadow: 0 0 25px rgba(0, 229, 255, 0.3); }
         .teacher-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cyan); margin-bottom: 15px; }
         .teacher-card h4 { font-family: var(--heading-font); font-size: 20px; color: var(--cyan); margin-bottom: 5px; }
-        .teacher-placeholder {
-            width: 120px; height: 120px;
-            border-radius: 50%;
-            background: rgba(0, 229, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            margin: 0 auto 15px;
-            border: 3px solid var(--cyan);
-        }
 
         .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .testimonial-card {
@@ -385,53 +397,73 @@
 
         footer { text-align: center; padding: 30px; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); }
 
-        /* Admin redirect overlay styles */
-        .admin-redirect-overlay {
-            position: fixed;
-            top: 0; left: 0;
+        /* Login Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(8, 11, 18, 0.95);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            display: none;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(15px);
-            animation: fadeInOverlay 0.3s ease;
+            backdrop-filter: blur(10px);
         }
-        @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--cyan);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
         }
-        .admin-redirect-overlay .redirect-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: pulse 1s infinite;
+        .modal-box h2 {
+            font-family: var(--heading-font);
+            color: var(--cyan);
+            margin-bottom: 15px;
+            font-size: 24px;
         }
-        @keyframes pulse {
-            0%,100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        .admin-redirect-overlay h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
-            color: #00e5ff;
-            margin-bottom: 10px;
-            text-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
-        }
-        .admin-redirect-overlay p {
-            font-size: 18px;
+        .modal-box p {
             opacity: 0.7;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
         }
-        .admin-redirect-overlay .countdown-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 80px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #00e5ff, #ff2d95);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 30px;
+            background: #fff;
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .google-btn:hover {
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        .google-btn img { width: 24px; height: 24px; }
+        .close-modal {
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .close-modal:hover {
+            background: rgba(255,255,255,0.1);
         }
 
         @media (max-width: 768px) {
@@ -447,16 +479,15 @@
         }
     </style>
 <meta property="og:title" content="Amar Educational Cafe | Where Learning Becomes Magic">
-<meta property="og:description" content="Expert tuition classes for Class 1st to 12th — Maths, Science & more. Learn from the best teachers with 15+ years of experience.">
-<meta property="og:image" content="https://peeyushmalik601-code.github.io/amar-education-cafe/favicon.png">
-<meta property="og:url" content="https://peeyushmalik601-code.github.io/amar-education-cafe/">
+<meta property="og:description" content="Expert tuition classes for Class 1st to 12th — Maths, Science & more.">
+<meta property="og:image" content="https://amareducationcafe.vercel.app/favicon.png">
+<meta property="og:url" content="https://amareducationcafe.vercel.app/">
 <meta property="og:type" content="website">
 </head>
 <body>
 
     <div class="aurora aurora-1"></div>
     <div class="aurora aurora-2"></div>
-
     <canvas id="particleCanvas"></canvas>
     <div class="scanlines"></div>
 
@@ -468,9 +499,10 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
+    <!-- NAVBAR -->
     <nav>
         <div class="logo">📚 AMAR EDUCATION CAFE</div>
-        <ul class="nav-links">
+        <ul class="nav-links" id="navLinks">
             <li><a href="#home">Home</a></li>
             <li><a href="#subjects">Subjects</a></li>
             <li><a href="#batches">Batches</a></li>
@@ -478,10 +510,30 @@
             <li><a href="#toppers">Toppers</a></li>
             <li><a href="#testimonials">Testimonials</a></li>
             <li><a href="#query">Query</a></li>
+            <li id="adminNavItem" style="display:none;">
+                <a href="admin.html" class="btn-admin btn" style="padding:8px 20px; font-size:13px;">⚙️ Admin Panel</a>
+            </li>
+            <li>
+                <div class="user-btn" id="userBtn" onclick="handleUserClick()">
+                    <i class="fas fa-user"></i> <span id="userBtnText">Login</span>
+                </div>
+            </li>
         </ul>
     </nav>
 
-    <!-- TOP SLIDER (16:9) -->
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <h2>🔐 Sign In</h2>
+            <p>Login with Google to enroll in batches</p>
+            <button class="google-btn" id="googleLoginBtn">
+                <img src="https://www.google.com/favicon.ico" alt="Google"> Sign in with Google
+            </button>
+            <button class="close-modal" onclick="closeLoginModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- TOP SLIDER -->
     <div class="top-slider">
         <div class="slider-track">
             <div class="slide" style="background-image: url('images/poster1.jpg');"></div>
@@ -496,7 +548,7 @@
         <h1>Welcome to <span>Amar Education Cafe</span></h1>
         <p class="tagline">"Where Learning Becomes Magic!"</p>
         <p class="desc">Expert tuition classes for Class 01st to 12th — Maths, Science & more. Learn from the best teachers with 15+ years of experience.</p>
-        <a href="batch-enroll.html" class="btn">Enroll Now</a>
+        <a href="#" onclick="handleEnrollClick(event)" class="btn">Enroll Now</a>
     </div>
 
     <!-- STATS -->
@@ -530,14 +582,14 @@
             <div class="subject-card"><div class="icon">🕓</div><h3>Batch 2</h3><p>4:30 PM – 5:30 PM</p><p style="margin-top:10px; opacity:0.8;">Most popular slot</p></div>
             <div class="subject-card"><div class="icon">🕔</div><h3>Batch 3</h3><p>5:30 PM – 6:30 PM</p><p style="margin-top:10px; opacity:0.8;">For late comers</p></div>
         </div>
-        <div style="text-align:center;"><a href="batch-enroll.html" class="btn">Enroll for Batch</a></div>
+        <div style="text-align:center;"><a href="#" onclick="handleEnrollClick(event)" class="btn">Enroll for Batch</a></div>
     </section>
 
     <!-- TEACHERS -->
     <section id="teachers" class="reveal">
         <h2 class="section-title">Know Your Teachers</h2>
         <div class="teachers-grid" id="teachersContainer">
-            <!-- Teachers yahan dynamically load honge -->
+            <p style="text-align:center; color: var(--cyan); grid-column: 1/-1;">Loading teachers...</p>
         </div>
     </section>
 
@@ -577,19 +629,19 @@
             <textarea id="q-message" name="message" placeholder="Write your query here..." required></textarea>
             <button type="submit" class="btn">Send Query on WhatsApp</button>
         </form>
-<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top:30px; font-size:16px; flex-wrap: wrap;">
-    <div style="flex: 1; min-width: 200px; padding: 10px;">
-        <h4 style="color: var(--cyan); margin-bottom: 5px;">Our First Branch</h4>
-        <p>📍 Parsaul, Greater Noida</p>
-    </div>
-    <div style="flex: 1; min-width: 200px; padding: 10px; text-align: right;">
-        <h4 style="color: var(--cyan); margin-bottom: 5px;">Our Second Branch</h4>
-        <p>📍 71Villa, 7th Park View, Yamuna Gaur City, Greater Noida</p>
-    </div>
-</div>
-<div style="text-align:center; font-size:18px; margin-top:10px;">
-    <p>📞 8057232954 / 6398390749</p>
-</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top:30px; font-size:16px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; padding: 10px;">
+                <h4 style="color: var(--cyan); margin-bottom: 5px;">Our First Branch</h4>
+                <p>📍 Parsaul, Greater Noida</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 10px; text-align: right;">
+                <h4 style="color: var(--cyan); margin-bottom: 5px;">Our Second Branch</h4>
+                <p>📍 71Villa, 7th Park View, Yamuna Gaur City, Greater Noida</p>
+            </div>
+        </div>
+        <div style="text-align:center; font-size:18px; margin-top:10px;">
+            <p>📞 8057232954 / 6398390749</p>
+        </div>
     </section>
 
     <!-- SOCIAL -->
@@ -607,126 +659,199 @@
         <p>© 2026 Amar Education Cafe | Made with ❤️ for your better future</p>
     </footer>
 
-    <script>
-        /* ========== LOAD TEACHERS FROM ADMIN PANEL ========== */
-        function loadAllTeachers() {
-            const container = document.getElementById('teachersContainer');
-            const adminTeachers = JSON.parse(localStorage.getItem('aec_teachers') || '[]');
-            
-            // Default hardcoded teachers (yeh hamesha rahenge)
-            const defaultTeachers = [
-                { name: 'AmarPal Sir', expertise: 'Mathematics Specialist', photo: 'images/amarpal-sir.jpg' },
-                { name: 'Arvind Sir', expertise: 'Physics Expert', photo: 'images/arvind-sir.jpg' },
-                { name: 'P.K. Sir', expertise: 'Chemistry Expert', photo: 'images/pk-sir.jpg' },
-                { name: 'Tarun Sir', expertise: 'Biology Expert', photo: 'images/tarun-sir.jpg' },
-                { name: 'Dheeraj Sir', expertise: 'English Expert', photo: 'images/dheeraj-sir.jpg' },
-                { name: 'Komal Mam', expertise: 'Math Expert', photo: 'images/komal-mam.jpg' },
-                { name: 'Pradeep Sir', expertise: 'Bio Expert', photo: 'images/pradeep-sir.jpg' }
-            ];
-            
-            let allTeachersHTML = '';
-            
-            // Default teachers
-            defaultTeachers.forEach(t => {
-                allTeachersHTML += `
-                    <div class="teacher-card">
-                        <img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="teacher-placeholder" style="display:none;">👨‍🏫</div>
-                        <h4>${t.name}</h4>
-                        <p>${t.expertise}</p>
-                    </div>
-                `;
-            });
-            
-            // Admin se add kiye gaye teachers
-            adminTeachers.forEach(t => {
-                if (t.photo) {
-                    allTeachersHTML += `
-                        <div class="teacher-card">
-                            <img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="teacher-placeholder" style="display:none;">👨‍🏫</div>
-                            <h4>${t.name}</h4>
-                            <p>${t.expertise}</p>
-                        </div>
-                    `;
-                } else {
-                    allTeachersHTML += `
-                        <div class="teacher-card">
-                            <div class="teacher-placeholder">👨‍🏫</div>
-                            <h4>${t.name}</h4>
-                            <p>${t.expertise}</p>
-                        </div>
-                    `;
-                }
-            });
-            
-            container.innerHTML = allTeachersHTML;
+    <!-- FIREBASE SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
+            authDomain: "amar-education-cafe.firebaseapp.com",
+            databaseURL: "https://amar-education-cafe-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "amar-education-cafe",
+            storageBucket: "amar-education-cafe.firebasestorage.app",
+            messagingSenderId: "90017897033",
+            appId: "1:90017897033:web:8b194667d619677d1bbd98"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Admin emails list
+        const ADMIN_EMAILS = [
+            'peeyushmalik601@gmail.com'
+            // Baad mein dusri email yahan add karna
+        ];
+
+        // ====== AUTH STATE ======
+        window.currentUser = null;
+        window.isAdmin = false;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.currentUser = user;
+                window.isAdmin = ADMIN_EMAILS.includes(user.email);
+                updateUIForLoggedInUser(user);
+            } else {
+                window.currentUser = null;
+                window.isAdmin = false;
+                updateUIForLoggedOutUser();
+            }
+        });
+
+        function updateUIForLoggedInUser(user) {
+            const userBtn = document.getElementById('userBtn');
+            const userBtnText = document.getElementById('userBtnText');
+            const adminNavItem = document.getElementById('adminNavItem');
+
+            userBtn.innerHTML = `
+                <img src="${user.photoURL}" alt="${user.displayName}">
+                <span>${user.displayName.split(' ')[0]}</span>
+                ${window.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}
+            `;
+            userBtn.onclick = handleUserClick;
+
+            // Admin panel button show/hide
+            if (window.isAdmin) {
+                adminNavItem.style.display = 'block';
+            } else {
+                adminNavItem.style.display = 'none';
+            }
         }
 
+        function updateUIForLoggedOutUser() {
+            const userBtn = document.getElementById('userBtn');
+            const userBtnText = document.getElementById('userBtnText');
+            const adminNavItem = document.getElementById('adminNavItem');
+
+            userBtn.innerHTML = '<i class="fas fa-user"></i> <span id="userBtnText">Login</span>';
+            userBtn.onclick = handleUserClick;
+            adminNavItem.style.display = 'none';
+        }
+
+        // ====== HANDLE USER CLICK ======
+        window.handleUserClick = function() {
+            if (window.currentUser) {
+                // Logged in — show logout option
+                if (confirm(`Logged in as ${window.currentUser.displayName}\n\nDo you want to logout?`)) {
+                    signOut(auth).then(() => {
+                        console.log('Logged out');
+                    }).catch((error) => {
+                        console.error('Logout error:', error);
+                    });
+                }
+            } else {
+                // Not logged in — show login modal
+                openLoginModal();
+            }
+        };
+
+        // ====== LOGIN MODAL ======
+        window.openLoginModal = function() {
+            document.getElementById('loginModal').classList.add('show');
+        };
+
+        window.closeLoginModal = function() {
+            document.getElementById('loginModal').classList.remove('show');
+        };
+
+        document.getElementById('googleLoginBtn').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log('Logged in:', result.user.email);
+                    closeLoginModal();
+                })
+                .catch((error) => {
+                    console.error('Login error:', error);
+                    alert('Login failed! Please try again.');
+                });
+        });
+
+        // ====== HANDLE ENROLL CLICK ======
+        window.handleEnrollClick = function(event) {
+            event.preventDefault();
+            if (window.currentUser) {
+                // Logged in — go to enroll page
+                window.location.href = 'batch-enroll.html';
+            } else {
+                // Not logged in — show login modal
+                openLoginModal();
+                alert('⚠️ Please login first to enroll in a batch!');
+            }
+        };
+
+        // ====== WHATSAPP QUERY ======
+        window.sendQuery = function(event) {
+            event.preventDefault();
+            const name = document.getElementById('q-name').value.trim();
+            const phone = document.getElementById('q-phone').value.trim();
+            const message = document.getElementById('q-message').value.trim();
+            const coachingNumber = "918057232954";
+
+            let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
+            if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
+            whatsappMsg += `%0A💬 *Message:* ${message}`;
+            const url = `https://wa.me/${coachingNumber}?text=${whatsappMsg}`;
+            window.open(url, '_blank');
+
+            document.getElementById('q-name').value = '';
+            document.getElementById('q-phone').value = '';
+            document.getElementById('q-message').value = '';
+            return false;
+        };
+
+        // ====== LOAD TEACHERS FROM FIREBASE ======
+        const teachersRef = ref(db, 'teachers');
+        onValue(teachersRef, (snapshot) => {
+            const container = document.getElementById('teachersContainer');
+            const data = snapshot.val();
+
+            // Default teachers
+            const defaultTeachers = [
+                { name: "AmarPal Sir", expertise: "Mathematics Specialist", photo: "images/amarpal-sir.jpg" },
+                { name: "Arvind Sir", expertise: "Physics Expert", photo: "images/arvind-sir.jpg" },
+                { name: "P.K. Sir", expertise: "Chemistry Expert", photo: "images/pk-sir.jpg" },
+                { name: "Tarun Sir", expertise: "Biology Expert", photo: "images/tarun-sir.jpg" },
+                { name: "Dheeraj Sir", expertise: "English Expert", photo: "images/dheeraj-sir.jpg" },
+                { name: "Komal Mam", expertise: "Math Expert", photo: "images/komal-mam.jpg" },
+                { name: "Pradeep Sir", expertise: "Bio Expert", photo: "images/pradeep-sir.jpg" }
+            ];
+
+            let allTeachers = [...defaultTeachers];
+
+            // Firebase teachers add karo
+            if (data) {
+                const firebaseTeachers = Object.values(data);
+                allTeachers = [...defaultTeachers, ...firebaseTeachers];
+            }
+
+            container.innerHTML = allTeachers.map(t => `
+                <div class="teacher-card">
+                    ${t.photo ? 
+                        `<img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` +
+                        `<div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:none;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>`
+                        :
+                        `<div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>`
+                    }
+                    <h4>${t.name}</h4>
+                    <p>${t.expertise}</p>
+                </div>
+            `).join('');
+        });
+    </script>
+
+    <!-- Non-module scripts -->
+    <script>
         /* ========== LOADER ========== */
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 2200);
         });
-
-        // Page load hote hi teachers load karo
-        loadAllTeachers();
-
-        /* ========== WHATSAPP + SECRET ADMIN ACCESS ========== */
-        function sendQuery(event) {
-            event.preventDefault();
-            const name = document.getElementById('q-name').value.trim();
-            const phone = document.getElementById('q-phone').value.trim();
-            const message = document.getElementById('q-message').value.trim();
-            const coachingNumber = "918057232954";
-            
-            // 🚨 SECRET ADMIN CODE CHECK
-            if (message === "itsamarmalik001@admin.com") {
-                document.getElementById('q-name').value = '';
-                document.getElementById('q-phone').value = '';
-                document.getElementById('q-message').value = '';
-                
-                const overlay = document.createElement('div');
-                overlay.className = 'admin-redirect-overlay';
-                overlay.innerHTML = `
-                    <div class="redirect-icon">🔐</div>
-                    <h2>Admin Access Granted!</h2>
-                    <p>Redirecting to Admin Panel...</p>
-                    <div class="countdown-number" id="countdownTimer">3</div>
-                `;
-                document.body.appendChild(overlay);
-                
-                let count = 3;
-                const timerInterval = setInterval(() => {
-                    count--;
-                    const timerEl = document.getElementById('countdownTimer');
-                    if (timerEl) timerEl.textContent = count;
-                    
-                    if (count <= 0) {
-                        clearInterval(timerInterval);
-                        sessionStorage.setItem('aec_admin_session', 'true');
-                        sessionStorage.setItem('aec_login_time', Date.now().toString());
-                        window.location.href = 'admin.html';
-                    }
-                }, 1000);
-                
-                return false;
-            }
-            
-            // Normal WhatsApp query
-            let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
-            if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
-            whatsappMsg += `%0A💬 *Message:* ${message}`;
-            const url = `https://wa.me/${coachingNumber}?text=${whatsappMsg}`;
-            window.open(url, '_blank');
-            
-            document.getElementById('q-name').value = '';
-            document.getElementById('q-phone').value = '';
-            document.getElementById('q-message').value = '';
-            
-            return false;
-        }
 
         /* ========== REVEAL ========== */
         const observer = new IntersectionObserver((entries) => {
@@ -834,4 +959,4 @@
         animateParticles();
     </script>
 </body>
-</html>
+    </html>
