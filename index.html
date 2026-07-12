@@ -33,6 +33,7 @@
             background: var(--bg);
             overflow-x: hidden;
             cursor: none;
+            padding-top: 70px;
         }
 
         #particleCanvas {
@@ -151,13 +152,14 @@
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 8%;
-            position: fixed; top: 0; width: 100%; z-index: 99;
-            background: rgba(8, 11, 18, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            position: fixed; top: 0; width: 100%; z-index: 999;
+            background: rgba(8, 11, 18, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0, 229, 255, 0.25);
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
             flex-wrap: wrap;
+            height: 70px;
         }
         .logo { font-family: var(--heading-font); font-size: 22px; font-weight: 700; color: var(--cyan); }
         .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; align-items: center; }
@@ -237,15 +239,16 @@
             margin: 15px auto 0; border-radius: 2px;
         }
 
+        /* ===== TOP SLIDER - Fixed below navbar ===== */
         .top-slider {
-            margin-top: 100px;
-            padding-top: 20px;
             width: 100%;
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             background: #111;
+            z-index: 1;
+            margin-bottom: 0;
         }
         .slider-track {
             position: absolute;
@@ -390,9 +393,8 @@
 
         footer { text-align: center; padding: 30px; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); }
 
-        /* Toast Notification */
         .toast-container {
-            position: fixed; top: 20px; right: 20px;
+            position: fixed; top: 80px; right: 20px;
             z-index: 99999; display: flex;
             flex-direction: column; gap: 10px;
         }
@@ -421,7 +423,6 @@
             to { opacity: 0; transform: translateX(50px); }
         }
 
-        /* Stylish Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -492,11 +493,12 @@
         .btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
 
         @media (max-width: 768px) {
-            nav { flex-direction: column; gap: 10px; }
+            nav { height: auto; padding: 10px 5%; }
+            body { padding-top: 60px; }
             .section-title { font-size: 28px; }
             .toppers-slider { width: 94vw; max-width: 95vw; height: 50vh; }
-            .top-slider { margin-top: 110px; }
         }
+
         @media (prefers-reduced-motion: reduce) {
             .reveal { opacity: 1; transform: none; filter: none; transition: none; }
             .slider-track, .toppers-track { animation: none; }
@@ -523,7 +525,6 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- NAVBAR -->
@@ -538,7 +539,7 @@
             <li><a href="#testimonials">Testimonials</a></li>
             <li><a href="#query">Query</a></li>
             <li id="adminNavItem" style="display:none;">
-                <a href="admin.html" class="btn" style="padding:8px 20px; font-size:13px; background:linear-gradient(135deg, var(--amber), #ff6d00));">⚙️ Admin</a>
+                <a href="admin.html" class="btn" style="padding:8px 20px; font-size:13px; background:linear-gradient(135deg, var(--amber), #ff6d00);">⚙️ Admin</a>
             </li>
             <li>
                 <div class="user-btn" id="userBtn" onclick="window.handleUserClick()">
@@ -548,7 +549,6 @@
         </ul>
     </nav>
 
-    <!-- MODAL OVERLAY (Multipurpose) -->
     <div class="modal-overlay" id="globalModal">
         <div class="modal-box" id="globalModalBox"></div>
     </div>
@@ -679,7 +679,6 @@
         <p>© 2026 Amar Education Cafe | Made with ❤️ for your better future</p>
     </footer>
 
-    <!-- FIREBASE SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
@@ -706,7 +705,6 @@
         window.currentUser = null;
         window.isAdmin = false;
 
-        // ====== AUTH STATE ======
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.currentUser = user;
@@ -741,7 +739,6 @@
             adminNavItem.style.display = 'none';
         }
 
-        // ====== TOAST ======
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
@@ -752,7 +749,6 @@
             setTimeout(() => { toast.remove(); }, 4000);
         }
 
-        // ====== MODAL ======
         window.showModal = function(title, message, buttons = [], icon = '') {
             const overlay = document.getElementById('globalModal');
             const box = document.getElementById('globalModalBox');
@@ -781,7 +777,6 @@
             document.getElementById('globalModal').classList.remove('show');
         };
 
-        // ====== USER CLICK ======
         window.handleUserClick = function() {
             if (window.currentUser) {
                 window.showModal(
@@ -812,7 +807,6 @@
             }
         };
 
-        // ====== LOGIN MODAL ======
         function openLoginModal() {
             window.showModal(
                 'Sign In Required',
@@ -847,20 +841,16 @@
             );
         }
 
-        // ====== ENROLL CLICK ======
         window.handleEnrollClick = function(event) {
             event.preventDefault();
             if (window.currentUser) {
                 window.location.href = 'batch-enroll.html';
             } else {
                 openLoginModal();
-                setTimeout(() => {
-                    showToast('⚠️ Please login first to enroll!', 'warning');
-                }, 500);
+                setTimeout(() => showToast('⚠️ Please login first to enroll!', 'warning'), 500);
             }
         };
 
-        // ====== WHATSAPP QUERY ======
         window.sendQuery = function(event) {
             event.preventDefault();
             const name = document.getElementById('q-name').value.trim();
@@ -880,7 +870,6 @@
             return false;
         };
 
-        // ====== LOAD TEACHERS ======
         const teachersRef = ref(db, 'teachers');
         onValue(teachersRef, (snapshot) => {
             const container = document.getElementById('teachersContainer');
@@ -911,16 +900,12 @@
             `).join('');
         });
 
-        // Expose toast globally
         window.showToast = showToast;
     </script>
 
-    <!-- Non-module scripts -->
     <script>
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 2200);
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2200);
         });
 
         const observer = new IntersectionObserver((entries) => {
@@ -1021,4 +1006,4 @@
         animateParticles();
     </script>
 </body>
-    </html>
+</html>
