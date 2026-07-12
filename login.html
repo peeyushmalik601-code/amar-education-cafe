@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Amar Education Cafe</title>
+    <link rel="icon" type="image/png" href="/favicon.png?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #080b12;
+            --cyan: #00e5ff;
+            --pink: #ff2d95;
+            --amber: #ffb300;
+            --card-bg: rgba(10, 15, 30, 0.7);
+            --border: rgba(0, 229, 255, 0.2);
+            --text: #e0e0e0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+        .aurora {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .aurora-1 {
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            top: -20%; left: -10%;
+            animation: driftAurora1 20s infinite alternate ease-in-out;
+        }
+        .aurora-2 {
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pink) 0%, transparent 70%);
+            bottom: -10%; right: -5%;
+            animation: driftAurora2 25s infinite alternate ease-in-out;
+        }
+        @keyframes driftAurora1 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10vw, 5vh); }
+        }
+        @keyframes driftAurora2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-8vw, -3vh); }
+        }
+        
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .particle {
+            position: absolute;
+            background: var(--cyan);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* Main Container */
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Login Card */
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.1), 0 0 100px rgba(255, 45, 149, 0.05);
+            transition: all 0.3s ease;
+        }
+        .login-card:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 80px rgba(0, 229, 255, 0.15), 0 0 120px rgba(255, 45, 149, 0.08);
+        }
+        
+        /* Logo */
+        .logo-section {
+            margin-bottom: 30px;
+        }
+        .logo-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan), var(--pink), var(--amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.05em;
+        }
+        .logo-subtitle {
+            font-size: 14px;
+            opacity: 0.6;
+            margin-top: 5px;
+            font-style: italic;
+            color: var(--amber);
+        }
+        
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .divider span {
+            font-size: 12px;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Google Button */
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px 30px;
+            background: #fff;
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .google-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+        }
+        .google-btn:active {
+            transform: scale(0.98);
+        }
+        .google-btn img {
+            width: 24px;
+            height: 24px;
+        }
+        .google-btn .btn-shine {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .google-btn:hover .btn-shine {
+            left: 100%;
+        }
+        
+        /* Loading State */
+        .google-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .google-btn.loading .btn-text {
+            display: none;
+        }
+        .google-btn.loading .btn-loader {
+            display: block;
+        }
+        .btn-loader {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0,0,0,0.2);
+            border-top: 3px solid #333;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Back Link */
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            opacity: 1;
+            color: var(--cyan);
+        }
+        .back-link i {
+            margin-right: 5px;
+        }
+        
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .feature-item {
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+        .feature-item i {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--cyan);
+        }
+        
+        /* Error Message */
+        .error-msg {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: #ff6b6b;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 35px 25px;
+            }
+            .logo-text {
+                font-size: 22px;
+            }
+            .google-btn {
+                padding: 14px 25px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="particles" id="particlesContainer"></div>
+    
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo -->
+            <div class="logo-section">
+                <span class="logo-icon">📚</span>
+                <div class="logo-text">Amar Education Cafe</div>
+                <div class="logo-subtitle">"Where Learning Becomes Magic!"</div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="divider">
+                <span>Continue with</span>
+            </div>
+            
+            <!-- Google Login Button -->
+            <button class="google-btn" id="googleLoginBtn" onclick="handleGoogleLogin()">
+                <span class="btn-shine"></span>
+                <img src="https://www.google.com/favicon.ico" alt="Google">
+                <span class="btn-text">Sign in with Google</span>
+                <span class="btn-loader"></span>
+            </button>
+            
+            <!-- Error Message -->
+            <div class="error-msg" id="errorMsg"></div>
+            
+            <!-- Features -->
+            <div class="features">
+                <div class="feature-item">
+                    <i class="fas fa-bolt"></i>
+                    Quick Login
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    Secure
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    One Click
+                </div>
+            </div>
+            
+            <!-- Back Link -->
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
+            authDomain: "amar-education-cafe.firebaseapp.com",
+            databaseURL: "https://amar-education-cafe-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "amar-education-cafe",
+            storageBucket: "amar-education-cafe.firebasestorage.app",
+            messagingSenderId: "90017897033",
+            appId: "1:90017897033:web:8b194667d619677d1bbd98"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Admin emails
+        const ADMIN_EMAILS = [
+            'peeyushmalik601@gmail.com'
+            // Dusri email baad mein add karna
+        ];
+
+        // Check if already logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Already logged in — redirect based on role
+                if (ADMIN_EMAILS.includes(user.email)) {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
+        // Google Login Handler
+        window.handleGoogleLogin = function() {
+            const btn = document.getElementById('googleLoginBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            // Show loading
+            btn.classList.add('loading');
+            errorMsg.style.display = 'none';
+            
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log('✅ Logged in:', user.email);
+                    
+                    // Redirect based on role
+                    if (ADMIN_EMAILS.includes(user.email)) {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                })
+                .catch((error) => {
+                    console.error('❌ Login error:', error);
+                    btn.classList.remove('loading');
+                    
+                    // Show error
+                    let message = 'Login failed! Please try again.';
+                    if (error.code === 'auth/popup-closed-by-user') {
+                        message = 'Login cancelled. Please try again.';
+                    } else if (error.code === 'auth/popup-blocked') {
+                        message = 'Popup blocked! Please allow popups for this site.';
+                    }
+                    
+                    errorMsg.textContent = message;
+                    errorMsg.style.display = 'block';
+                    
+                    // Hide error after 4 seconds
+                    setTimeout(() => {
+                        errorMsg.style.display = 'none';
+                    }, 4000);
+                });
+        };
+    </script>
+
+    <!-- Floating Particles Script -->
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particlesContainer');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 4 + 2;
+            const left = Math.random() * 100;
+            const delay = Math.random() * 5;
+            const duration = Math.random() * 6 + 4;
+            
+            particle.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                left: ${left}%;
+                animation-delay: ${delay}s;
+                animation-duration: ${duration}s;
+            `;
+            
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Recreate particles periodically
+        setInterval(() => {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(p => {
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 6 + 4) + 's';
+                p.style.animationDelay = Math.random() * 2 + 's';
+            });
+        }, 10000);
+    </script>
+</body>
+</html>
