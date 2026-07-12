@@ -165,9 +165,7 @@
         .nav-links a:hover { color: var(--cyan); }
         .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--cyan); transition: width 0.3s; }
         .nav-links a:hover::after { width: 100%; }
-        .nav-links a.active { color: var(--cyan); }
 
-        /* Login/User Button */
         .user-btn {
             display: flex; align-items: center; gap: 8px;
             padding: 8px 18px;
@@ -226,11 +224,6 @@
         }
         .btn:hover::before { width: 300px; height: 300px; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 0 40px rgba(0, 229, 255, 0.5), 0 0 80px rgba(255, 45, 149, 0.3); }
-
-        .btn-admin {
-            background: linear-gradient(135deg, var(--amber), #ff6d00) !important;
-            display: none;
-        }
 
         section { padding: 100px 5%; position: relative; z-index: 10; }
         .section-title {
@@ -397,12 +390,43 @@
 
         footer { text-align: center; padding: 30px; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); }
 
-        /* Login Modal */
+        /* Toast Notification */
+        .toast-container {
+            position: fixed; top: 20px; right: 20px;
+            z-index: 99999; display: flex;
+            flex-direction: column; gap: 10px;
+        }
+        .toast {
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            animation: slideInRight 0.4s ease, fadeOut 0.4s ease 3.6s forwards;
+            max-width: 400px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .toast-success { background: rgba(76, 175, 80, 0.9); border: 1px solid #4caf50; }
+        .toast-error { background: rgba(244, 67, 54, 0.9); border: 1px solid #f44336; }
+        .toast-info { background: rgba(0, 229, 255, 0.9); border: 1px solid var(--cyan); color: #000; }
+        .toast-warning { background: rgba(255, 179, 0, 0.9); border: 1px solid var(--amber); color: #000; }
+        @keyframes slideInRight {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(50px); }
+        }
+
+        /* Stylish Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
-            z-index: 9999;
+            z-index: 99999;
             display: none;
             justify-content: center;
             align-items: center;
@@ -411,60 +435,61 @@
         .modal-overlay.show { display: flex; }
         .modal-box {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--cyan);
             border-radius: 20px;
             padding: 40px;
             text-align: center;
-            max-width: 400px;
+            max-width: 420px;
             width: 90%;
-            box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.2);
+            animation: modalPop 0.3s ease;
         }
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-box .modal-icon { font-size: 60px; margin-bottom: 15px; }
         .modal-box h2 {
             font-family: var(--heading-font);
             color: var(--cyan);
-            margin-bottom: 15px;
-            font-size: 24px;
+            margin-bottom: 10px;
+            font-size: 22px;
         }
         .modal-box p {
             opacity: 0.7;
             margin-bottom: 25px;
             font-size: 14px;
+            line-height: 1.6;
+        }
+        .modal-buttons {
+            display: flex; gap: 10px;
+            justify-content: center; flex-wrap: wrap;
         }
         .google-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 30px;
-            background: #fff;
-            color: #333;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; padding: 14px 30px;
+            background: #fff; color: #333;
+            border: none; border-radius: 50px;
+            cursor: pointer; font-weight: 600;
+            font-size: 15px; width: 100%;
             transition: all 0.3s ease;
         }
         .google-btn:hover {
-            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
             transform: translateY(-2px);
         }
-        .google-btn img { width: 24px; height: 24px; }
-        .close-modal {
-            margin-top: 15px;
+        .google-btn img { width: 22px; height: 22px; }
+        .modal-close {
+            padding: 12px 25px;
             background: transparent;
             border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            padding: 10px 25px;
-            border-radius: 50px;
-            cursor: pointer;
+            color: #fff; border-radius: 50px;
+            cursor: pointer; font-size: 14px;
             transition: all 0.3s ease;
         }
-        .close-modal:hover {
-            background: rgba(255,255,255,0.1);
-        }
+        .modal-close:hover { background: rgba(255,255,255,0.1); }
+        .btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
 
         @media (max-width: 768px) {
             nav { flex-direction: column; gap: 10px; }
@@ -472,7 +497,6 @@
             .toppers-slider { width: 94vw; max-width: 95vw; height: 50vh; }
             .top-slider { margin-top: 110px; }
         }
-
         @media (prefers-reduced-motion: reduce) {
             .reveal { opacity: 1; transform: none; filter: none; transition: none; }
             .slider-track, .toppers-track { animation: none; }
@@ -499,6 +523,9 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- NAVBAR -->
     <nav>
         <div class="logo">📚 AMAR EDUCATION CAFE</div>
@@ -511,26 +538,19 @@
             <li><a href="#testimonials">Testimonials</a></li>
             <li><a href="#query">Query</a></li>
             <li id="adminNavItem" style="display:none;">
-                <a href="admin.html" class="btn-admin btn" style="padding:8px 20px; font-size:13px;">⚙️ Admin Panel</a>
+                <a href="admin.html" class="btn" style="padding:8px 20px; font-size:13px; background:linear-gradient(135deg, var(--amber), #ff6d00));">⚙️ Admin</a>
             </li>
             <li>
-                <div class="user-btn" id="userBtn" onclick="handleUserClick()">
+                <div class="user-btn" id="userBtn" onclick="window.handleUserClick()">
                     <i class="fas fa-user"></i> <span id="userBtnText">Login</span>
                 </div>
             </li>
         </ul>
     </nav>
 
-    <!-- LOGIN MODAL -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal-box">
-            <h2>🔐 Sign In</h2>
-            <p>Login with Google to enroll in batches</p>
-            <button class="google-btn" id="googleLoginBtn">
-                <img src="https://www.google.com/favicon.ico" alt="Google"> Sign in with Google
-            </button>
-            <button class="close-modal" onclick="closeLoginModal()">Cancel</button>
-        </div>
+    <!-- MODAL OVERLAY (Multipurpose) -->
+    <div class="modal-overlay" id="globalModal">
+        <div class="modal-box" id="globalModalBox"></div>
     </div>
 
     <!-- TOP SLIDER -->
@@ -548,7 +568,7 @@
         <h1>Welcome to <span>Amar Education Cafe</span></h1>
         <p class="tagline">"Where Learning Becomes Magic!"</p>
         <p class="desc">Expert tuition classes for Class 01st to 12th — Maths, Science & more. Learn from the best teachers with 15+ years of experience.</p>
-        <a href="#" onclick="handleEnrollClick(event)" class="btn">Enroll Now</a>
+        <a href="#" onclick="window.handleEnrollClick(event)" class="btn">Enroll Now</a>
     </div>
 
     <!-- STATS -->
@@ -582,7 +602,7 @@
             <div class="subject-card"><div class="icon">🕓</div><h3>Batch 2</h3><p>4:30 PM – 5:30 PM</p><p style="margin-top:10px; opacity:0.8;">Most popular slot</p></div>
             <div class="subject-card"><div class="icon">🕔</div><h3>Batch 3</h3><p>5:30 PM – 6:30 PM</p><p style="margin-top:10px; opacity:0.8;">For late comers</p></div>
         </div>
-        <div style="text-align:center;"><a href="#" onclick="handleEnrollClick(event)" class="btn">Enroll for Batch</a></div>
+        <div style="text-align:center;"><a href="#" onclick="window.handleEnrollClick(event)" class="btn">Enroll for Batch</a></div>
     </section>
 
     <!-- TEACHERS -->
@@ -623,7 +643,7 @@
     <section id="query" class="reveal">
         <h2 class="section-title">Ask Your Query</h2>
         <p style="text-align:center; font-size:18px; margin-bottom:30px;">Have a doubt? Send us your query directly on WhatsApp.</p>
-        <form id="queryForm" class="contact-form" onsubmit="return sendQuery(event)">
+        <form id="queryForm" class="contact-form" onsubmit="return window.sendQuery(event)">
             <input type="text" id="q-name" name="name" placeholder="Your Name" required>
             <input type="tel" id="q-phone" name="phone" placeholder="Phone Number (Optional)">
             <textarea id="q-message" name="message" placeholder="Write your query here..." required></textarea>
@@ -665,7 +685,6 @@
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
             authDomain: "amar-education-cafe.firebaseapp.com",
@@ -680,17 +699,14 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
 
-        // Admin emails list
-        const ADMIN_EMAILS = [
-            'peeyushmalik601@gmail.com'
-            // Baad mein dusri email yahan add karna
-        ];
+        const ADMIN_EMAILS = ['peeyushmalik601@gmail.com'];
 
-        // ====== AUTH STATE ======
         window.currentUser = null;
         window.isAdmin = false;
 
+        // ====== AUTH STATE ======
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.currentUser = user;
@@ -705,17 +721,12 @@
 
         function updateUIForLoggedInUser(user) {
             const userBtn = document.getElementById('userBtn');
-            const userBtnText = document.getElementById('userBtnText');
             const adminNavItem = document.getElementById('adminNavItem');
-
             userBtn.innerHTML = `
-                <img src="${user.photoURL}" alt="${user.displayName}">
-                <span>${user.displayName.split(' ')[0]}</span>
+                <img src="${user.photoURL || ''}" alt="${user.displayName}" onerror="this.style.display='none'">
+                <span>${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
                 ${window.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}
             `;
-            userBtn.onclick = handleUserClick;
-
-            // Admin panel button show/hide
             if (window.isAdmin) {
                 adminNavItem.style.display = 'block';
             } else {
@@ -725,62 +736,127 @@
 
         function updateUIForLoggedOutUser() {
             const userBtn = document.getElementById('userBtn');
-            const userBtnText = document.getElementById('userBtnText');
             const adminNavItem = document.getElementById('adminNavItem');
-
-            userBtn.innerHTML = '<i class="fas fa-user"></i> <span id="userBtnText">Login</span>';
-            userBtn.onclick = handleUserClick;
+            userBtn.innerHTML = '<i class="fas fa-user"></i> <span>Login</span>';
             adminNavItem.style.display = 'none';
         }
 
-        // ====== HANDLE USER CLICK ======
+        // ====== TOAST ======
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<span>${icons[type]}</span> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 4000);
+        }
+
+        // ====== MODAL ======
+        window.showModal = function(title, message, buttons = [], icon = '') {
+            const overlay = document.getElementById('globalModal');
+            const box = document.getElementById('globalModalBox');
+            box.innerHTML = `
+                ${icon ? `<div class="modal-icon">${icon}</div>` : ''}
+                <h2>${title}</h2>
+                <p>${message}</p>
+                <div class="modal-buttons">
+                    ${buttons.map(b => `
+                        <button class="${b.class || 'modal-close'}" id="${b.id || ''}">
+                            ${b.text}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            overlay.classList.add('show');
+            buttons.forEach(b => {
+                if (b.id && b.onClick) {
+                    const el = document.getElementById(b.id);
+                    if (el) el.addEventListener('click', b.onClick);
+                }
+            });
+        };
+
+        window.closeModal = function() {
+            document.getElementById('globalModal').classList.remove('show');
+        };
+
+        // ====== USER CLICK ======
         window.handleUserClick = function() {
             if (window.currentUser) {
-                // Logged in — show logout option
-                if (confirm(`Logged in as ${window.currentUser.displayName}\n\nDo you want to logout?`)) {
-                    signOut(auth).then(() => {
-                        console.log('Logged out');
-                    }).catch((error) => {
-                        console.error('Logout error:', error);
-                    });
-                }
+                window.showModal(
+                    'User Account',
+                    `Logged in as <strong>${window.currentUser.displayName}</strong><br><small>${window.currentUser.email}</small>`,
+                    [
+                        {
+                            text: '🚪 Logout',
+                            class: 'btn btn-danger',
+                            id: 'logoutConfirmBtn',
+                            onClick: () => {
+                                signOut(auth);
+                                window.closeModal();
+                                showToast('Logged out successfully', 'info');
+                            }
+                        },
+                        {
+                            text: 'Close',
+                            class: 'modal-close',
+                            id: 'closeModalBtn',
+                            onClick: window.closeModal
+                        }
+                    ],
+                    '👤'
+                );
             } else {
-                // Not logged in — show login modal
                 openLoginModal();
             }
         };
 
         // ====== LOGIN MODAL ======
-        window.openLoginModal = function() {
-            document.getElementById('loginModal').classList.add('show');
-        };
+        function openLoginModal() {
+            window.showModal(
+                'Sign In Required',
+                'Login with Google to enroll in batches and access all features.',
+                [
+                    {
+                        text: `<img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Sign in with Google`,
+                        class: 'google-btn',
+                        id: 'googleLoginBtn',
+                        onClick: () => {
+                            signInWithPopup(auth, provider)
+                                .then(() => {
+                                    window.closeModal();
+                                    showToast('Welcome! Login successful 🎉', 'success');
+                                })
+                                .catch((error) => {
+                                    window.closeModal();
+                                    if (error.code !== 'auth/popup-closed-by-user') {
+                                        showToast('Login failed! Please try again.', 'error');
+                                    }
+                                });
+                        }
+                    },
+                    {
+                        text: 'Cancel',
+                        class: 'modal-close',
+                        id: 'cancelLoginBtn',
+                        onClick: window.closeModal
+                    }
+                ],
+                '🔐'
+            );
+        }
 
-        window.closeLoginModal = function() {
-            document.getElementById('loginModal').classList.remove('show');
-        };
-
-        document.getElementById('googleLoginBtn').addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    console.log('Logged in:', result.user.email);
-                    closeLoginModal();
-                })
-                .catch((error) => {
-                    console.error('Login error:', error);
-                    alert('Login failed! Please try again.');
-                });
-        });
-
-        // ====== HANDLE ENROLL CLICK ======
+        // ====== ENROLL CLICK ======
         window.handleEnrollClick = function(event) {
             event.preventDefault();
             if (window.currentUser) {
-                // Logged in — go to enroll page
                 window.location.href = 'batch-enroll.html';
             } else {
-                // Not logged in — show login modal
                 openLoginModal();
-                alert('⚠️ Please login first to enroll in a batch!');
+                setTimeout(() => {
+                    showToast('⚠️ Please login first to enroll!', 'warning');
+                }, 500);
             }
         };
 
@@ -791,26 +867,24 @@
             const phone = document.getElementById('q-phone').value.trim();
             const message = document.getElementById('q-message').value.trim();
             const coachingNumber = "918057232954";
-
+            
             let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
             if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
             whatsappMsg += `%0A💬 *Message:* ${message}`;
-            const url = `https://wa.me/${coachingNumber}?text=${whatsappMsg}`;
-            window.open(url, '_blank');
-
+            window.open(`https://wa.me/${coachingNumber}?text=${whatsappMsg}`, '_blank');
+            
             document.getElementById('q-name').value = '';
             document.getElementById('q-phone').value = '';
             document.getElementById('q-message').value = '';
+            showToast('Query sent on WhatsApp! ✅', 'success');
             return false;
         };
 
-        // ====== LOAD TEACHERS FROM FIREBASE ======
+        // ====== LOAD TEACHERS ======
         const teachersRef = ref(db, 'teachers');
         onValue(teachersRef, (snapshot) => {
             const container = document.getElementById('teachersContainer');
             const data = snapshot.val();
-
-            // Default teachers
             const defaultTeachers = [
                 { name: "AmarPal Sir", expertise: "Mathematics Specialist", photo: "images/amarpal-sir.jpg" },
                 { name: "Arvind Sir", expertise: "Physics Expert", photo: "images/arvind-sir.jpg" },
@@ -820,21 +894,15 @@
                 { name: "Komal Mam", expertise: "Math Expert", photo: "images/komal-mam.jpg" },
                 { name: "Pradeep Sir", expertise: "Bio Expert", photo: "images/pradeep-sir.jpg" }
             ];
-
             let allTeachers = [...defaultTeachers];
-
-            // Firebase teachers add karo
             if (data) {
-                const firebaseTeachers = Object.values(data);
-                allTeachers = [...defaultTeachers, ...firebaseTeachers];
+                allTeachers = [...defaultTeachers, ...Object.values(data)];
             }
-
             container.innerHTML = allTeachers.map(t => `
                 <div class="teacher-card">
                     ${t.photo ? 
-                        `<img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` +
-                        `<div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:none;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>`
-                        :
+                        `<img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:none;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>` :
                         `<div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>`
                     }
                     <h4>${t.name}</h4>
@@ -842,30 +910,27 @@
                 </div>
             `).join('');
         });
+
+        // Expose toast globally
+        window.showToast = showToast;
     </script>
 
     <!-- Non-module scripts -->
     <script>
-        /* ========== LOADER ========== */
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 2200);
         });
 
-        /* ========== REVEAL ========== */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                } else {
-                    entry.target.classList.remove('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('active');
+                else entry.target.classList.remove('active');
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        /* ========== CUSTOM CURSOR ========== */
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
         if (cursor && cursorDot) {
@@ -883,7 +948,6 @@
             });
         }
 
-        /* ========== MAGNETIC BUTTONS ========== */
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
@@ -898,7 +962,6 @@
             });
         });
 
-        /* ========== PARTICLES ========== */
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -932,7 +995,6 @@
         window.addEventListener('resize', resizeParticles);
         resizeParticles();
         for (let i = 0; i < particleCount; i++) particles.push(new Particle());
-
         function animateParticles() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             for (let i = 0; i < particles.length; i++) {
