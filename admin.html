@@ -60,7 +60,6 @@
             padding: 20px; position: relative; z-index: 1;
         }
         
-        /* Loading */
         .loading-screen {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -85,7 +84,6 @@
             font-family: 'Orbitron', sans-serif;
         }
         
-        /* Access Denied */
         .access-denied {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -101,7 +99,6 @@
         }
         .access-denied p { opacity: 0.7; margin-bottom: 30px; font-size: 16px; }
         
-        /* Header */
         .admin-header {
             display: flex; justify-content: space-between;
             align-items: center; padding: 25px 30px;
@@ -128,7 +125,6 @@
             border-radius: 50%; border: 2px solid var(--cyan);
         }
         
-        /* Toast */
         .toast-container {
             position: fixed; top: 20px; right: 20px;
             z-index: 99999; display: flex;
@@ -159,7 +155,6 @@
             to { opacity: 0; transform: translateX(50px); }
         }
         
-        /* Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -195,7 +190,6 @@
         .modal-box p { opacity: 0.7; margin-bottom: 25px; font-size: 14px; line-height: 1.6; }
         .modal-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
         
-        /* Tabs */
         .tabs {
             display: flex; gap: 8px; margin-bottom: 30px;
             flex-wrap: wrap; background: rgba(255,255,255,0.02);
@@ -308,7 +302,6 @@
         .btn:active { transform: scale(0.98); }
         .btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
         .btn-danger:hover { box-shadow: 0 0 25px rgba(255, 68, 68, 0.4); }
-        .btn-warning { background: linear-gradient(135deg, var(--amber), #ff6d00); }
         .btn-small { padding: 8px 18px; font-size: 13px; border-radius: 6px; }
         .btn-outline {
             background: transparent; border: 1px solid var(--cyan);
@@ -358,6 +351,18 @@
         .action-btns { display: flex; gap: 8px; }
         .empty-state { text-align: center; padding: 50px; opacity: 0.5; }
         .empty-state i { font-size: 60px; margin-bottom: 20px; display: block; }
+        .info-box {
+            margin-top:20px; padding:15px;
+            background:rgba(255,179,0,0.1);
+            border:1px solid var(--amber);
+            border-radius:10px; font-size:13px;
+        }
+        .info-box strong { color: var(--amber); }
+        .info-box code {
+            background: rgba(0,229,255,0.1);
+            padding: 3px 8px; border-radius: 5px;
+            color: var(--cyan);
+        }
         
         @media (max-width: 768px) {
             .container { padding: 10px; }
@@ -375,21 +380,17 @@
     <div class="aurora aurora-1"></div>
     <div class="aurora aurora-2"></div>
     
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
     
-    <!-- Modal -->
     <div class="modal-overlay" id="globalModal">
         <div class="modal-box" id="globalModalBox"></div>
     </div>
     
-    <!-- Loading -->
     <div class="loading-screen" id="loadingScreen">
         <div class="spinner"></div>
         <p>Verifying access...</p>
     </div>
     
-    <!-- Access Denied -->
     <div class="access-denied" id="accessDenied" style="display:none;">
         <div class="icon">🚫</div>
         <h2>Access Denied!</h2>
@@ -403,7 +404,6 @@
         </button>
     </div>
     
-    <!-- Main Content -->
     <div class="container" id="mainContent" style="display:none;">
         <div class="admin-header">
             <div class="title-section">
@@ -481,9 +481,11 @@
                             <input type="text" id="tExpertise" placeholder="e.g., Mathematics Specialist" required>
                         </div>
                         <div class="form-group">
-                            <label>🖼 Photo URL</label>
-                            <input type="url" id="tPhoto" placeholder="https://example.com/photo.jpg">
-                            <small style="opacity:0.5; margin-top:5px;">Paste direct image URL (Imgur, Cloudinary, etc.)</small>
+                            <label>🖼 Teacher Photo (Select File)</label>
+                            <input type="file" id="tPhotoFile" accept="image/*">
+                            <small style="opacity:0.5; margin-top:5px;">
+                                Filename: <strong id="photoFilename">images/teacher-name.jpg</strong>
+                            </small>
                             <div class="photo-preview-box">
                                 <img id="previewTeacher" src="" alt="Preview" style="display:none;">
                                 <span id="noTeacherPreview">📷 Preview</span>
@@ -491,12 +493,20 @@
                         </div>
                     </div>
                     <button type="submit" class="btn" style="margin-top:20px;" id="addTeacherBtn">
-                        <i class="fas fa-cloud-upload-alt"></i> Add to Firebase
+                        <i class="fas fa-cloud-upload-alt"></i> Add Teacher
                     </button>
                     <button type="button" class="btn btn-outline" style="margin-top:20px; margin-left:10px;" id="resetTeacherBtn">
                         <i class="fas fa-redo"></i> Reset
                     </button>
                 </form>
+                <div class="info-box">
+                    <strong>📸 Photo Upload Guide:</strong><br>
+                    1. Select teacher photo above<br>
+                    2. Click <strong>"Add Teacher"</strong><br>
+                    3. Download the photo from popup<br>
+                    4. Upload to GitHub: <code>images/filename.jpg</code><br>
+                    5. Website will auto-display the photo!
+                </div>
             </div>
         </div>
         
@@ -544,12 +554,20 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>📱 Phone *</label>
+                            <label>📱 Phone Number *</label>
                             <input type="tel" id="sPhone" placeholder="+91 9876543210" required>
                         </div>
                         <div class="form-group">
                             <label>📅 Joining Date *</label>
                             <input type="date" id="sDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>👨‍👩‍👧 Parent Name</label>
+                            <input type="text" id="sParent" placeholder="Father/Mother name (Optional)">
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Notes</label>
+                            <input type="text" id="sNotes" placeholder="Any extra info (Optional)">
                         </div>
                     </div>
                     <button type="submit" class="btn" style="margin-top:20px;" id="addStudentBtn">
@@ -573,12 +591,13 @@
                                 <th>Name</th>
                                 <th>Class</th>
                                 <th>Phone</th>
+                                <th>Parent</th>
                                 <th>Joining Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="studentsTableBody">
-                            <tr><td colspan="5"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No students added yet</p></div></td></tr>
+                            <tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No students added yet</p></div></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -750,7 +769,6 @@
                 </tr>
             `).join('');
             
-            // Delete buttons
             document.querySelectorAll('.delete-teacher-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const key = this.getAttribute('data-key');
@@ -766,7 +784,7 @@
                                 onClick: () => {
                                     const teacherRef = ref(db, 'teachers/' + key);
                                     remove(teacherRef).then(() => {
-                                        showToast(`✅ "${teacher.name}" deleted from Firebase!`, 'success');
+                                        showToast(`✅ "${teacher.name}" deleted!`, 'success');
                                     }).catch((error) => {
                                         showToast('❌ Error: ' + error.message, 'error');
                                     });
@@ -785,6 +803,87 @@
             });
         }
 
+        // ====== ADD TEACHER ======
+        function addTeacher() {
+            const name = document.getElementById('tName').value.trim();
+            const subject = document.getElementById('tSubject').value.trim();
+            const expertise = document.getElementById('tExpertise').value.trim();
+            const photoFile = document.getElementById('tPhotoFile').files[0];
+            
+            if (!name || !subject || !expertise) {
+                showToast('❌ Please fill all required fields!', 'error');
+                return;
+            }
+            
+            const safeName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            const photoExt = photoFile ? photoFile.name.split('.').pop() : 'jpg';
+            const photoFileName = `${safeName}.${photoExt}`;
+            const photoPath = `images/${photoFileName}`;
+            
+            let photoURL = '';
+            if (photoFile) {
+                photoURL = URL.createObjectURL(photoFile);
+            }
+            
+            const teacher = {
+                name: name,
+                subject: subject,
+                expertise: expertise,
+                photo: photoPath,
+                photoFileName: photoFileName,
+                addedAt: new Date().toISOString(),
+                addedBy: auth.currentUser?.email || 'admin'
+            };
+            
+            const teachersRef = ref(db, 'teachers');
+            push(teachersRef, teacher).then(() => {
+                showToast(`✅ "${name}" added! Upload photo to GitHub: images/${photoFileName}`, 'success');
+                
+                if (photoFile) {
+                    showModal(
+                        '📸 Save Photo to GitHub',
+                        `<p>Please save this photo as:</p>
+                        <code style="background:rgba(0,229,255,0.1); padding:10px; display:block; margin:15px 0; border-radius:8px; font-size:16px; color:var(--cyan);">
+                        images/${photoFileName}
+                        </code>
+                        <p style="font-size:13px; opacity:0.7;">1. Download photo below<br>2. Go to GitHub repo → images/ folder<br>3. Upload with this exact filename</p>`,
+                        [
+                            {
+                                text: '📥 Download Photo',
+                                class: 'btn',
+                                id: 'downloadPhotoBtn',
+                                onClick: () => {
+                                    const a = document.createElement('a');
+                                    a.href = photoURL;
+                                    a.download = photoFileName;
+                                    a.click();
+                                }
+                            },
+                            {
+                                text: 'Close',
+                                class: 'btn btn-outline',
+                                id: 'closePhotoModalBtn',
+                                onClick: () => {}
+                            }
+                        ],
+                        '📸'
+                    );
+                }
+                
+                resetTeacherForm();
+                switchTab('teachers');
+            }).catch((error) => {
+                showToast('❌ Firebase Error: ' + error.message, 'error');
+            });
+        }
+
+        function resetTeacherForm() {
+            document.getElementById('teacherForm').reset();
+            document.getElementById('previewTeacher').style.display = 'none';
+            document.getElementById('noTeacherPreview').style.display = 'block';
+            document.getElementById('photoFilename').textContent = 'images/teacher-name.jpg';
+        }
+
         // ====== LOCAL STUDENTS ======
         function addStudent() {
             const student = {
@@ -792,6 +891,8 @@
                 class: document.getElementById('sClass').value,
                 phone: document.getElementById('sPhone').value.trim(),
                 joiningDate: document.getElementById('sDate').value,
+                parentName: document.getElementById('sParent').value.trim() || '-',
+                notes: document.getElementById('sNotes').value.trim() || '-',
                 addedAt: new Date().toISOString()
             };
             
@@ -818,7 +919,7 @@
             document.getElementById('totalStudents').textContent = localStudents.length;
             
             if (localStudents.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No students added yet</p></div></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No students added yet</p></div></td></tr>';
                 return;
             }
             
@@ -827,6 +928,7 @@
                     <td><strong>${s.name}</strong></td>
                     <td>Class ${s.class}</td>
                     <td>${s.phone}</td>
+                    <td>${s.parentName || '-'}</td>
                     <td>${s.joiningDate}</td>
                     <td>
                         <div class="action-btns">
@@ -871,38 +973,6 @@
             });
         }
 
-        // ====== ADD TEACHER ======
-        function addTeacher() {
-            const teacher = {
-                name: document.getElementById('tName').value.trim(),
-                subject: document.getElementById('tSubject').value.trim(),
-                expertise: document.getElementById('tExpertise').value.trim(),
-                photo: document.getElementById('tPhoto').value.trim() || '',
-                addedAt: new Date().toISOString(),
-                addedBy: auth.currentUser?.email || 'admin'
-            };
-            
-            if (!teacher.name || !teacher.subject || !teacher.expertise) {
-                showToast('❌ Please fill all required fields!', 'error');
-                return;
-            }
-            
-            const teachersRef = ref(db, 'teachers');
-            push(teachersRef, teacher).then(() => {
-                showToast(`✅ "${teacher.name}" added! Visible to all users now!`, 'success');
-                resetTeacherForm();
-                switchTab('teachers');
-            }).catch((error) => {
-                showToast('❌ Firebase Error: ' + error.message, 'error');
-            });
-        }
-
-        function resetTeacherForm() {
-            document.getElementById('teacherForm').reset();
-            document.getElementById('previewTeacher').style.display = 'none';
-            document.getElementById('noTeacherPreview').style.display = 'block';
-        }
-
         // ====== STATS ======
         function updateStats() {
             document.getElementById('totalStudents').textContent = localStudents.length;
@@ -932,19 +1002,38 @@
             });
             
             // Photo preview
-            document.getElementById('tPhoto').addEventListener('input', function() {
-                const url = this.value.trim();
+            const tPhotoFile = document.getElementById('tPhotoFile');
+            const tNameInput = document.getElementById('tName');
+            
+            tPhotoFile.addEventListener('change', function() {
+                const file = this.files[0];
                 const preview = document.getElementById('previewTeacher');
                 const placeholder = document.getElementById('noTeacherPreview');
-                if (url) {
-                    preview.src = url;
-                    preview.style.display = 'block';
-                    placeholder.style.display = 'none';
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        placeholder.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                    updatePhotoFilename();
                 } else {
                     preview.style.display = 'none';
                     placeholder.style.display = 'block';
                 }
             });
+            
+            tNameInput.addEventListener('input', updatePhotoFilename);
+            
+            function updatePhotoFilename() {
+                const name = tNameInput.value.trim();
+                const photoFile = tPhotoFile.files[0];
+                const ext = photoFile ? photoFile.name.split('.').pop() : 'jpg';
+                const safeName = name ? name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') : 'teacher-name';
+                document.getElementById('photoFilename').textContent = `images/${safeName}.${ext}`;
+            }
         }
 
         // ====== TAB SWITCHING ======
@@ -955,10 +1044,8 @@
             event.target.closest('.tab-btn').classList.add('active');
         };
 
-        // Set today's date
         document.getElementById('sDate').value = new Date().toISOString().split('T')[0];
         
-        // Expose to global scope
         window.showToast = showToast;
         window.closeModal = closeModal;
     </script>
