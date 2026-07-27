@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | Amar Education Cafe</title>
     <link rel="icon" type="image/png" href="/favicon.png?v=1">
+
+    <!-- 🔒 Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        connect-src 'self' 
+            https://*.firebaseio.com 
+            https://*.googleapis.com 
+            https://identitytoolkit.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://*.firebaseapp.com 
+            wss://*.firebaseio.com
+            https://accounts.google.com;
+        img-src 'self' data: blob: https://lh3.googleusercontent.com;
+        frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://*.googleapis.com;
+        form-action 'self';
+        object-src 'none';
+    ">
+
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -470,15 +491,15 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label>👤 Full Name *</label>
-                            <input type="text" id="tName" placeholder="Enter teacher full name" required>
+                            <input type="text" id="tName" placeholder="Enter teacher full name" required maxlength="100">
                         </div>
                         <div class="form-group">
                             <label>📚 Subject *</label>
-                            <input type="text" id="tSubject" placeholder="e.g., Mathematics" required>
+                            <input type="text" id="tSubject" placeholder="e.g., Mathematics" required maxlength="100">
                         </div>
                         <div class="form-group">
                             <label>⭐ Expertise *</label>
-                            <input type="text" id="tExpertise" placeholder="e.g., Mathematics Specialist" required>
+                            <input type="text" id="tExpertise" placeholder="e.g., Mathematics Specialist" required maxlength="150">
                         </div>
                         <div class="form-group">
                             <label>🖼 Teacher Photo (Select File)</label>
@@ -541,7 +562,7 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label>📛 Full Name *</label>
-                            <input type="text" id="sName" placeholder="Enter student full name" required>
+                            <input type="text" id="sName" placeholder="Enter student full name" required maxlength="100">
                         </div>
                         <div class="form-group">
                             <label>🏫 Class *</label>
@@ -555,7 +576,7 @@
                         </div>
                         <div class="form-group">
                             <label>📱 Phone Number *</label>
-                            <input type="tel" id="sPhone" placeholder="+91 9876543210" required>
+                            <input type="tel" id="sPhone" placeholder="+91 9876543210" required maxlength="15">
                         </div>
                         <div class="form-group">
                             <label>📅 Joining Date *</label>
@@ -563,11 +584,11 @@
                         </div>
                         <div class="form-group">
                             <label>👨‍👩‍👧 Parent Name</label>
-                            <input type="text" id="sParent" placeholder="Father/Mother name (Optional)">
+                            <input type="text" id="sParent" placeholder="Father/Mother name (Optional)" maxlength="100">
                         </div>
                         <div class="form-group">
                             <label>📝 Notes</label>
-                            <input type="text" id="sNotes" placeholder="Any extra info (Optional)">
+                            <input type="text" id="sNotes" placeholder="Any extra info (Optional)" maxlength="200">
                         </div>
                     </div>
                     <button type="submit" class="btn" style="margin-top:20px;" id="addStudentBtn">
@@ -610,6 +631,7 @@
         import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
+        // Firebase Config - public-safe, protected by Realtime Database rules
         const firebaseConfig = {
             apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
             authDomain: "amar-education-cafe.firebaseapp.com",
@@ -624,10 +646,36 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
+        // Admin emails - only for UI access control, actual security via Realtime Database rules
         const ADMIN_EMAILS = ['peeyushmalik601@gmail.com'];
         
         let firebaseTeachers = {};
-        let localStudents = JSON.parse(localStorage.getItem('aec_students') || '[]');
+        let localStudents = [];
+
+        // 🔒 XSS Prevention
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+        }
+
+        // 🔒 Sanitize filename - only allow alphanumeric, hyphens, underscores, dots
+        function sanitizeFilename(name) {
+            return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-_.]/g, '').substring(0, 100);
+        }
+
+        // Load students from localStorage safely
+        function loadStudents() {
+            try {
+                const data = localStorage.getItem('aec_students');
+                localStudents = data ? JSON.parse(data) : [];
+                // Validate array
+                if (!Array.isArray(localStudents)) localStudents = [];
+            } catch (e) {
+                localStudents = [];
+                localStorage.removeItem('aec_students');
+            }
+        }
+        loadStudents();
 
         // ====== TOAST ======
         function showToast(message, type = 'info') {
@@ -635,7 +683,7 @@
             const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
-            toast.innerHTML = `<span>${icons[type]}</span> ${message}`;
+            toast.innerHTML = `<span>${icons[type]}</span> ${escapeHTML(message)}`;
             container.appendChild(toast);
             setTimeout(() => { toast.remove(); }, 4000);
         }
@@ -646,7 +694,7 @@
             const box = document.getElementById('globalModalBox');
             box.innerHTML = `
                 ${icon ? `<div class="modal-icon">${icon}</div>` : ''}
-                <h2>${title}</h2>
+                <h2>${escapeHTML(title)}</h2>
                 <p>${message}</p>
                 <div class="modal-buttons">
                     ${buttons.map(b => `
@@ -694,10 +742,14 @@
         });
 
         function setupUserInfo(user) {
+            const safeName = escapeHTML(user.displayName || 'Admin');
+            const photoURL = user.photoURL || '';
+            
             document.getElementById('userInfo').innerHTML = `
-                <img src="${user.photoURL || ''}" alt="${user.displayName}" onerror="this.style.display='none'">
-                <span>${user.displayName}</span>
+                ${photoURL ? `<img src="${photoURL}" alt="${safeName}" onerror="this.style.display='none'">` : ''}
+                <span>${safeName}</span>
             `;
+            
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 showModal(
                     'Confirm Logout',
@@ -747,18 +799,25 @@
                 return;
             }
             
-            tbody.innerHTML = entries.map(([key, t]) => `
+            tbody.innerHTML = entries.map(([key, t]) => {
+                const safeName = escapeHTML(t.name || '');
+                const safeSubject = escapeHTML(t.subject || '');
+                const safeExpertise = escapeHTML(t.expertise || '');
+                const safePhoto = t.photo || '';
+                const firstLetter = safeName ? safeName[0] : '?';
+                
+                return `
                 <tr>
                     <td>
-                        ${t.photo ? 
-                            `<img src="${t.photo}" class="student-photo" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="no-photo" style="display:none;">${t.name[0]}</div>` :
-                            `<div class="no-photo">${t.name[0]}</div>`
+                        ${safePhoto ? 
+                            `<img src="${safePhoto}" class="student-photo" alt="${safeName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                            <div class="no-photo" style="display:none;">${firstLetter}</div>` :
+                            `<div class="no-photo">${firstLetter}</div>`
                         }
                     </td>
-                    <td><strong>${t.name}</strong></td>
-                    <td>${t.subject}</td>
-                    <td>${t.expertise}</td>
+                    <td><strong>${safeName}</strong></td>
+                    <td>${safeSubject}</td>
+                    <td>${safeExpertise}</td>
                     <td>
                         <div class="action-btns">
                             <button class="btn btn-danger btn-small delete-teacher-btn" data-key="${key}">
@@ -766,16 +825,18 @@
                             </button>
                         </div>
                     </td>
-                </tr>
-            `).join('');
+                </tr>`;
+            }).join('');
             
             document.querySelectorAll('.delete-teacher-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const key = this.getAttribute('data-key');
                     const teacher = firebaseTeachers[key];
+                    const safeName = escapeHTML(teacher.name || 'Unknown');
+                    
                     showModal(
                         'Delete Teacher',
-                        `Are you sure you want to delete <strong>"${teacher.name}"</strong>?<br><small>This will remove them from the website for ALL users!</small>`,
+                        `Are you sure you want to delete <strong>"${safeName}"</strong>?<br><small>This will remove them from the website for ALL users!</small>`,
                         [
                             {
                                 text: '🗑 Yes, Delete',
@@ -784,9 +845,9 @@
                                 onClick: () => {
                                     const teacherRef = ref(db, 'teachers/' + key);
                                     remove(teacherRef).then(() => {
-                                        showToast(`✅ "${teacher.name}" deleted!`, 'success');
-                                    }).catch((error) => {
-                                        showToast('❌ Error: ' + error.message, 'error');
+                                        showToast(`Teacher deleted successfully!`, 'success');
+                                    }).catch(() => {
+                                        showToast('Failed to delete teacher. Please try again.', 'error');
                                     });
                                 }
                             },
@@ -811,13 +872,16 @@
             const photoFile = document.getElementById('tPhotoFile').files[0];
             
             if (!name || !subject || !expertise) {
-                showToast('❌ Please fill all required fields!', 'error');
+                showToast('Please fill all required fields!', 'error');
                 return;
             }
             
-            const safeName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-            const photoExt = photoFile ? photoFile.name.split('.').pop() : 'jpg';
-            const photoFileName = `${safeName}.${photoExt}`;
+            const safeName = sanitizeFilename(name);
+            const photoExt = photoFile ? photoFile.name.split('.').pop().toLowerCase() : 'jpg';
+            // Validate extension
+            const allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            const finalExt = allowedExts.includes(photoExt) ? photoExt : 'jpg';
+            const photoFileName = `${safeName}.${finalExt}`;
             const photoPath = `images/${photoFileName}`;
             
             let photoURL = '';
@@ -837,14 +901,15 @@
             
             const teachersRef = ref(db, 'teachers');
             push(teachersRef, teacher).then(() => {
-                showToast(`✅ "${name}" added! Upload photo to GitHub: images/${photoFileName}`, 'success');
+                const safeDisplayName = escapeHTML(name);
+                showToast(`"${safeDisplayName}" added successfully! Upload photo to GitHub: images/${photoFileName}`, 'success');
                 
                 if (photoFile) {
                     showModal(
                         '📸 Save Photo to GitHub',
                         `<p>Please save this photo as:</p>
                         <code style="background:rgba(0,229,255,0.1); padding:10px; display:block; margin:15px 0; border-radius:8px; font-size:16px; color:var(--cyan);">
-                        images/${photoFileName}
+                        images/${escapeHTML(photoFileName)}
                         </code>
                         <p style="font-size:13px; opacity:0.7;">1. Download photo below<br>2. Go to GitHub repo → images/ folder<br>3. Upload with this exact filename</p>`,
                         [
@@ -872,8 +937,8 @@
                 
                 resetTeacherForm();
                 switchTab('teachers');
-            }).catch((error) => {
-                showToast('❌ Firebase Error: ' + error.message, 'error');
+            }).catch(() => {
+                showToast('Failed to add teacher. Please try again.', 'error');
             });
         }
 
@@ -897,7 +962,7 @@
             };
             
             if (!student.name || !student.class || !student.phone || !student.joiningDate) {
-                showToast('❌ Please fill all required fields!', 'error');
+                showToast('Please fill all required fields!', 'error');
                 return;
             }
             
@@ -910,7 +975,9 @@
             displayLocalStudents();
             updateStats();
             switchTab('students');
-            showToast(`✅ Student "${student.name}" added!`, 'success');
+            
+            const safeName = escapeHTML(student.name);
+            showToast(`Student "${safeName}" added!`, 'success');
         }
 
         function displayLocalStudents() {
@@ -923,13 +990,20 @@
                 return;
             }
             
-            tbody.innerHTML = localStudents.map((s, i) => `
+            tbody.innerHTML = localStudents.map((s, i) => {
+                const safeName = escapeHTML(s.name || '');
+                const safeClass = escapeHTML(s.class || '');
+                const safePhone = escapeHTML(s.phone || '');
+                const safeParent = escapeHTML(s.parentName || '-');
+                const safeDate = escapeHTML(s.joiningDate || '');
+                
+                return `
                 <tr>
-                    <td><strong>${s.name}</strong></td>
-                    <td>Class ${s.class}</td>
-                    <td>${s.phone}</td>
-                    <td>${s.parentName || '-'}</td>
-                    <td>${s.joiningDate}</td>
+                    <td><strong>${safeName}</strong></td>
+                    <td>Class ${safeClass}</td>
+                    <td>${safePhone}</td>
+                    <td>${safeParent}</td>
+                    <td>${safeDate}</td>
                     <td>
                         <div class="action-btns">
                             <button class="btn btn-danger btn-small delete-student-btn" data-index="${i}">
@@ -937,16 +1011,18 @@
                             </button>
                         </div>
                     </td>
-                </tr>
-            `).join('');
+                </tr>`;
+            }).join('');
             
             document.querySelectorAll('.delete-student-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const index = parseInt(this.getAttribute('data-index'));
                     const student = localStudents[index];
+                    const safeName = escapeHTML(student.name || 'Unknown');
+                    
                     showModal(
                         'Delete Student',
-                        `Are you sure you want to delete <strong>"${student.name}"</strong>?`,
+                        `Are you sure you want to delete <strong>"${safeName}"</strong>?`,
                         [
                             {
                                 text: '🗑 Yes, Delete',
@@ -957,7 +1033,7 @@
                                     localStorage.setItem('aec_students', JSON.stringify(localStudents));
                                     displayLocalStudents();
                                     updateStats();
-                                    showToast('✅ Student deleted!', 'success');
+                                    showToast('Student deleted!', 'success');
                                 }
                             },
                             {
@@ -1001,7 +1077,7 @@
                 document.getElementById('sDate').value = new Date().toISOString().split('T')[0];
             });
             
-            // Photo preview
+            // Photo preview with validation
             const tPhotoFile = document.getElementById('tPhotoFile');
             const tNameInput = document.getElementById('tName');
             
@@ -1011,6 +1087,25 @@
                 const placeholder = document.getElementById('noTeacherPreview');
                 
                 if (file) {
+                    // Validate file type
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                    if (!allowedTypes.includes(file.type)) {
+                        showToast('Please select a valid image file (JPG, PNG, GIF, WebP)', 'warning');
+                        this.value = '';
+                        preview.style.display = 'none';
+                        placeholder.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Validate file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('Image size must be less than 5MB', 'warning');
+                        this.value = '';
+                        preview.style.display = 'none';
+                        placeholder.style.display = 'block';
+                        return;
+                    }
+                    
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         preview.src = e.target.result;
@@ -1030,9 +1125,11 @@
             function updatePhotoFilename() {
                 const name = tNameInput.value.trim();
                 const photoFile = tPhotoFile.files[0];
-                const ext = photoFile ? photoFile.name.split('.').pop() : 'jpg';
-                const safeName = name ? name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') : 'teacher-name';
-                document.getElementById('photoFilename').textContent = `images/${safeName}.${ext}`;
+                const ext = photoFile ? photoFile.name.split('.').pop().toLowerCase() : 'jpg';
+                const allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                const finalExt = allowedExts.includes(ext) ? ext : 'jpg';
+                const safeName = name ? sanitizeFilename(name) : 'teacher-name';
+                document.getElementById('photoFilename').textContent = `images/${safeName}.${finalExt}`;
             }
         }
 
