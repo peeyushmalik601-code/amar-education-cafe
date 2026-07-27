@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sending to WhatsApp... | Amar Educational Cafe</title>
+    <link rel="icon" type="image/png" href="/favicon.png?v=1">
+
+    <!-- 🔒 Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline';
+        style-src 'self' 'unsafe-inline';
+        form-action 'self' https://wa.me;
+        object-src 'none';
+    ">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: #fff;
             display: flex;
@@ -59,6 +70,28 @@
             color: #25d366;
             margin-top: 20px;
             font-size: 14px;
+            text-decoration: none;
+            padding: 12px 24px;
+            border: 1px solid #25d366;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        .manual-link:hover {
+            background: #25d366;
+            color: #fff;
+        }
+        .error-box {
+            background: rgba(255, 68, 68, 0.15);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+        .error-box a {
+            color: #ff6b6b;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -70,13 +103,23 @@
         <div class="countdown" id="countdown">2</div>
         <p style="font-size:14px; opacity:0.7;">Sending your enrollment details to Amar Education Cafe</p>
         <a id="whatsappLink" class="manual-link" href="#">Click here if not redirected</a>
+        <div class="error-box" id="errorBox">
+            <p>⚠️ Could not generate WhatsApp link. Please go back and try again.</p>
+            <a href="batch-enroll.html">← Back to Enrollment Form</a>
+        </div>
     </div>
 
     <script>
-        // Coaching ka WhatsApp number
+        // 🔒 Sanitize function to prevent injection
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+        }
+
+        // Coaching WhatsApp number (India country code + number)
         const coachingNumber = "918057232954";
         
-        // URL se data parse karo
+        // Parse URL parameters safely
         const params = new URLSearchParams(window.location.search);
         const name = decodeURIComponent(params.get('name') || '');
         const studentClass = decodeURIComponent(params.get('class') || '');
@@ -84,34 +127,51 @@
         const phone = decodeURIComponent(params.get('phone') || '');
         const subjects = decodeURIComponent(params.get('subjects') || 'Not Selected');
         
-        // Message format
-        const message = `📋 *New Batch Enrollment* %0A%0A` +
-                        `👤 *Name:* ${name} %0A` +
-                        `🏫 *Class:* ${studentClass} %0A` +
-                        `⏰ *Batch:* ${batch} %0A` +
-                        `📞 *Phone:* ${phone} %0A` +
-                        `📚 *Subjects:* ${subjects} %0A%0A` +
-                        `_Kindly provide fee details._`;
-        
-        // WhatsApp URL
-        const whatsappUrl = `https://wa.me/${coachingNumber}?text=${message}`;
-        
-        // Manual link bhi set karo
-        document.getElementById('whatsappLink').href = whatsappUrl;
-        
-        // Countdown + Auto Redirect
-        let seconds = 2;
-        const countdownEl = document.getElementById('countdown');
-        
-        const timer = setInterval(() => {
-            seconds--;
-            countdownEl.textContent = seconds;
+        // Validate required data
+        if (!name || !studentClass || !batch) {
+            // Show error if critical data missing
+            document.querySelector('.loader').style.display = 'none';
+            document.querySelector('h2').textContent = 'Error!';
+            document.querySelector('h2').style.color = '#ff6b6b';
+            document.querySelector('.redirect-box p').textContent = 'Missing enrollment data. Please fill the form again.';
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('errorBox').style.display = 'block';
+        } else {
+            // Build WhatsApp message with sanitized data
+            const safeName = escapeHTML(name);
+            const safeClass = escapeHTML(studentClass);
+            const safeBatch = escapeHTML(batch);
+            const safePhone = escapeHTML(phone);
+            const safeSubjects = escapeHTML(subjects);
             
-            if (seconds <= 0) {
-                clearInterval(timer);
-                window.location.href = whatsappUrl;
-            }
-        }, 1000);
+            const message = `📋 *New Batch Enrollment* %0A%0A` +
+                            `👤 *Name:* ${safeName} %0A` +
+                            `🏫 *Class:* ${safeClass} %0A` +
+                            `⏰ *Batch:* ${safeBatch} %0A` +
+                            `📞 *Phone:* ${safePhone} %0A` +
+                            `📚 *Subjects:* ${safeSubjects} %0A%0A` +
+                            `_Kindly provide fee details._`;
+            
+            // WhatsApp URL
+            const whatsappUrl = `https://wa.me/${coachingNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Set manual link
+            document.getElementById('whatsappLink').href = whatsappUrl;
+            
+            // Countdown + Auto Redirect
+            let seconds = 2;
+            const countdownEl = document.getElementById('countdown');
+            
+            const timer = setInterval(() => {
+                seconds--;
+                countdownEl.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    window.location.href = whatsappUrl;
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
