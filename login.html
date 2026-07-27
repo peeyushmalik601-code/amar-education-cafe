@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Amar Education Cafe</title>
     <link rel="icon" type="image/png" href="/favicon.png?v=1">
+
+    <!-- 🔒 Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        connect-src 'self' 
+            https://*.firebaseio.com 
+            https://*.googleapis.com 
+            https://identitytoolkit.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://*.firebaseapp.com 
+            wss://*.firebaseio.com
+            https://accounts.google.com;
+        img-src 'self' data: https://lh3.googleusercontent.com https://www.google.com;
+        frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://*.googleapis.com;
+        form-action 'self';
+        object-src 'none';
+    ">
+
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -32,7 +53,6 @@
             overflow: hidden;
         }
         
-        /* Animated Background */
         .bg-animation {
             position: fixed;
             top: 0; left: 0;
@@ -68,7 +88,6 @@
             100% { transform: translate(-8vw, -3vh); }
         }
         
-        /* Floating Particles */
         .particles {
             position: fixed;
             top: 0; left: 0;
@@ -100,7 +119,6 @@
             }
         }
         
-        /* Main Container */
         .login-container {
             width: 100%;
             max-width: 450px;
@@ -119,7 +137,6 @@
             }
         }
         
-        /* Login Card */
         .login-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -136,7 +153,6 @@
             box-shadow: 0 0 80px rgba(0, 229, 255, 0.15), 0 0 120px rgba(255, 45, 149, 0.08);
         }
         
-        /* Logo */
         .logo-section {
             margin-bottom: 30px;
         }
@@ -168,7 +184,6 @@
             color: var(--amber);
         }
         
-        /* Divider */
         .divider {
             display: flex;
             align-items: center;
@@ -189,7 +204,6 @@
             letter-spacing: 0.1em;
         }
         
-        /* Google Button */
         .google-btn {
             display: flex;
             align-items: center;
@@ -231,7 +245,6 @@
             left: 100%;
         }
         
-        /* Loading State */
         .google-btn.loading {
             pointer-events: none;
             opacity: 0.7;
@@ -256,7 +269,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Back Link */
         .back-link {
             display: inline-block;
             margin-top: 25px;
@@ -274,7 +286,6 @@
             margin-right: 5px;
         }
         
-        /* Features */
         .features {
             display: flex;
             justify-content: center;
@@ -294,7 +305,6 @@
             color: var(--cyan);
         }
         
-        /* Error Message */
         .error-msg {
             background: rgba(255, 68, 68, 0.1);
             border: 1px solid rgba(255, 68, 68, 0.3);
@@ -313,7 +323,6 @@
             75% { transform: translateX(-5px); }
         }
         
-        /* Responsive */
         @media (max-width: 480px) {
             .login-card {
                 padding: 35px 25px;
@@ -329,27 +338,22 @@
     </style>
 </head>
 <body>
-    <!-- Background -->
     <div class="aurora aurora-1"></div>
     <div class="aurora aurora-2"></div>
     <div class="particles" id="particlesContainer"></div>
     
-    <!-- Login Container -->
     <div class="login-container">
         <div class="login-card">
-            <!-- Logo -->
             <div class="logo-section">
                 <span class="logo-icon">📚</span>
                 <div class="logo-text">Amar Education Cafe</div>
                 <div class="logo-subtitle">"Where Learning Becomes Magic!"</div>
             </div>
             
-            <!-- Divider -->
             <div class="divider">
                 <span>Continue with</span>
             </div>
             
-            <!-- Google Login Button -->
             <button class="google-btn" id="googleLoginBtn" onclick="handleGoogleLogin()">
                 <span class="btn-shine"></span>
                 <img src="https://www.google.com/favicon.ico" alt="Google">
@@ -357,10 +361,8 @@
                 <span class="btn-loader"></span>
             </button>
             
-            <!-- Error Message -->
             <div class="error-msg" id="errorMsg"></div>
             
-            <!-- Features -->
             <div class="features">
                 <div class="feature-item">
                     <i class="fas fa-bolt"></i>
@@ -376,19 +378,17 @@
                 </div>
             </div>
             
-            <!-- Back Link -->
             <a href="index.html" class="back-link">
                 <i class="fas fa-arrow-left"></i> Back to Home
             </a>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-        // Firebase Config
+        // Firebase Config - public-safe keys
         const firebaseConfig = {
             apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
             authDomain: "amar-education-cafe.firebaseapp.com",
@@ -402,17 +402,16 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
 
-        // Admin emails
+        // Admin emails - only for UI redirect, security via Realtime Database rules
         const ADMIN_EMAILS = [
             'peeyushmalik601@gmail.com'
-            // Dusri email baad mein add karna
         ];
 
         // Check if already logged in
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Already logged in — redirect based on role
                 if (ADMIN_EMAILS.includes(user.email)) {
                     window.location.href = 'admin.html';
                 } else {
@@ -432,32 +431,24 @@
             
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    const user = result.user;
-                    console.log('✅ Logged in:', user.email);
-                    
-                    // Redirect based on role
-                    if (ADMIN_EMAILS.includes(user.email)) {
-                        window.location.href = 'admin.html';
-                    } else {
-                        window.location.href = 'index.html';
-                    }
+                    // Redirect handled by onAuthStateChanged above
                 })
                 .catch((error) => {
-                    console.error('❌ Login error:', error);
                     btn.classList.remove('loading');
                     
-                    // Show error
+                    // Generic error messages - no internal details exposed
                     let message = 'Login failed! Please try again.';
                     if (error.code === 'auth/popup-closed-by-user') {
                         message = 'Login cancelled. Please try again.';
                     } else if (error.code === 'auth/popup-blocked') {
                         message = 'Popup blocked! Please allow popups for this site.';
                     }
+                    // All other errors show generic message
                     
                     errorMsg.textContent = message;
                     errorMsg.style.display = 'block';
                     
-                    // Hide error after 4 seconds
+                    // Auto-hide error after 4 seconds
                     setTimeout(() => {
                         errorMsg.style.display = 'none';
                     }, 4000);
@@ -465,7 +456,6 @@
         };
     </script>
 
-    <!-- Floating Particles Script -->
     <script>
         // Create floating particles
         const particlesContainer = document.getElementById('particlesContainer');
