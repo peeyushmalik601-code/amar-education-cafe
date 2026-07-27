@@ -830,7 +830,8 @@
                         class: 'google-btn',
                         id: 'googleLoginBtn',
                         onClick: () => {
-                            signInWithPopup(auth, provider)
+                            provider.setCustomParameters({ prompt: 'select_account' });
+signInWithPopup(auth, provider)
                                 .then(() => {
                                     window.closeModal();
                                     showToast('Welcome! Login successful 🎉', 'success');
