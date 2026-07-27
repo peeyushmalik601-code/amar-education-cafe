@@ -6,8 +6,34 @@
     <title>Amar Educational Cafe | Where Learning Becomes Magic</title>
     <link rel="icon" type="image/png" href="/favicon.png?v=1">
 
+    <!-- 🔒 Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://cdnjs.cloudflare.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        connect-src 'self' 
+            https://*.firebaseio.com 
+            https://*.googleapis.com 
+            https://identitytoolkit.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://*.firebaseapp.com 
+            wss://*.firebaseio.com
+            https://accounts.google.com;
+        img-src 'self' data: https://lh3.googleusercontent.com https://www.google.com;
+        frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://*.googleapis.com;
+        form-action 'self' https://wa.me;
+        object-src 'none';
+    ">
+
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <meta property="og:title" content="Amar Educational Cafe | Where Learning Becomes Magic">
+    <meta property="og:description" content="Expert tuition classes for Class 1st to 12th — Maths, Science & more.">
+    <meta property="og:image" content="https://amareducationcafe.vercel.app/favicon.png">
+    <meta property="og:url" content="https://amareducationcafe.vercel.app/">
+    <meta property="og:type" content="website">
 
     <style>
         :root {
@@ -501,11 +527,6 @@
             .slider-track, .toppers-track { animation: none; }
         }
     </style>
-<meta property="og:title" content="Amar Educational Cafe | Where Learning Becomes Magic">
-<meta property="og:description" content="Expert tuition classes for Class 1st to 12th — Maths, Science & more.">
-<meta property="og:image" content="https://amareducationcafe.vercel.app/favicon.png">
-<meta property="og:url" content="https://amareducationcafe.vercel.app/">
-<meta property="og:type" content="website">
 </head>
 <body>
 
@@ -546,7 +567,7 @@
         </ul>
     </nav>
 
-    <!-- SPACER - 110px to push banner below navbar -->
+    <!-- SPACER -->
     <div style="height: 110px; width: 100%;"></div>
 
     <div class="modal-overlay" id="globalModal">
@@ -644,9 +665,9 @@
         <h2 class="section-title">Ask Your Query</h2>
         <p style="text-align:center; font-size:18px; margin-bottom:30px;">Have a doubt? Send us your query directly on WhatsApp.</p>
         <form id="queryForm" class="contact-form" onsubmit="return window.sendQuery(event)">
-            <input type="text" id="q-name" name="name" placeholder="Your Name" required>
-            <input type="tel" id="q-phone" name="phone" placeholder="Phone Number (Optional)">
-            <textarea id="q-message" name="message" placeholder="Write your query here..." required></textarea>
+            <input type="text" id="q-name" name="name" placeholder="Your Name" required maxlength="100">
+            <input type="tel" id="q-phone" name="phone" placeholder="Phone Number (Optional)" maxlength="15">
+            <textarea id="q-message" name="message" placeholder="Write your query here..." required maxlength="500"></textarea>
             <button type="submit" class="btn">Send Query on WhatsApp</button>
         </form>
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top:30px; font-size:16px; flex-wrap: wrap;">
@@ -669,9 +690,9 @@
         <h3>Let's Get Social</h3>
         <p>Follow us for updates, tips, and behind-the-scenes</p>
         <div class="social-icons">
-            <a href="https://instagram.com/amareducationcaffe" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://youtube.com/@Amar-education-cafe" target="_blank" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
-            <a href="https://facebook.com/share/1DNPniLgUA/" target="_blank" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/amareducationcaffe" target="_blank" rel="noopener noreferrer" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com/@Amar-education-cafe" target="_blank" rel="noopener noreferrer" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+            <a href="https://facebook.com/share/1DNPniLgUA/" target="_blank" rel="noopener noreferrer" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
     </section>
 
@@ -684,6 +705,7 @@
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
+        // Firebase config - public-safe, protected by Realtime Database rules
         const firebaseConfig = {
             apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
             authDomain: "amar-education-cafe.firebaseapp.com",
@@ -700,10 +722,20 @@
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
+        // Admin emails - only for UI, actual security via Realtime Database rules
         const ADMIN_EMAILS = ['peeyushmalik601@gmail.com','amarpalmalik1@gmail.com'];
 
         window.currentUser = null;
         window.isAdmin = false;
+
+        // XSS Prevention
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+        }
+
+        // Rate limiting for query form
+        let lastQueryTime = 0;
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -720,11 +752,15 @@
         function updateUIForLoggedInUser(user) {
             const userBtn = document.getElementById('userBtn');
             const adminNavItem = document.getElementById('adminNavItem');
+            const safeName = escapeHTML(user.displayName ? user.displayName.split(' ')[0] : 'User');
+            const photoURL = user.photoURL || '';
+            
             userBtn.innerHTML = `
-                <img src="${user.photoURL || ''}" alt="${user.displayName}" onerror="this.style.display='none'">
-                <span>${user.displayName ? user.displayName.split(' ')[0] : 'User'}</span>
+                ${photoURL ? `<img src="${photoURL}" alt="${escapeHTML(user.displayName || '')}" onerror="this.style.display='none'">` : ''}
+                <span>${safeName}</span>
                 ${window.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}
             `;
+            
             if (window.isAdmin) {
                 adminNavItem.style.display = 'block';
             } else {
@@ -744,7 +780,7 @@
             const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
-            toast.innerHTML = `<span>${icons[type]}</span> ${message}`;
+            toast.innerHTML = `<span>${icons[type]}</span> ${escapeHTML(message)}`;
             container.appendChild(toast);
             setTimeout(() => { toast.remove(); }, 4000);
         }
@@ -754,7 +790,7 @@
             const box = document.getElementById('globalModalBox');
             box.innerHTML = `
                 ${icon ? `<div class="modal-icon">${icon}</div>` : ''}
-                <h2>${title}</h2>
+                <h2>${escapeHTML(title)}</h2>
                 <p>${message}</p>
                 <div class="modal-buttons">
                     ${buttons.map(b => `
@@ -779,9 +815,11 @@
 
         window.handleUserClick = function() {
             if (window.currentUser) {
+                const safeName = escapeHTML(window.currentUser.displayName || 'User');
+                const safeEmail = escapeHTML(window.currentUser.email || '');
                 window.showModal(
                     'User Account',
-                    `Logged in as <strong>${window.currentUser.displayName}</strong><br><small>${window.currentUser.email}</small>`,
+                    `Logged in as <strong>${safeName}</strong><br><small>${safeEmail}</small>`,
                     [
                         {
                             text: '🚪 Logout',
@@ -813,7 +851,7 @@
                 'Login with Google to enroll in batches and access all features.',
                 [
                     {
-                        text: `<img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Sign in with Google`,
+                        text: 'Sign in with Google',
                         class: 'google-btn',
                         id: 'googleLoginBtn',
                         onClick: () => {
@@ -853,15 +891,30 @@
 
         window.sendQuery = function(event) {
             event.preventDefault();
+            
+            // Rate limiting - 5 seconds between queries
+            const now = Date.now();
+            if (now - lastQueryTime < 5000) {
+                showToast('⚠️ Please wait before sending another query!', 'warning');
+                return false;
+            }
+            lastQueryTime = now;
+            
             const name = document.getElementById('q-name').value.trim();
             const phone = document.getElementById('q-phone').value.trim();
             const message = document.getElementById('q-message').value.trim();
             const coachingNumber = "918057232954";
             
-            let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${name}`;
-            if (phone) whatsappMsg += `%0A📞 *Phone:* ${phone}`;
-            whatsappMsg += `%0A💬 *Message:* ${message}`;
-            window.open(`https://wa.me/${coachingNumber}?text=${whatsappMsg}`, '_blank');
+            // Sanitize inputs for WhatsApp URL
+            const safeName = encodeURIComponent(name);
+            const safePhone = phone ? encodeURIComponent(phone) : '';
+            const safeMessage = encodeURIComponent(message);
+            
+            let whatsappMsg = `❓ *New Query* %0A%0A👤 *Name:* ${safeName}`;
+            if (safePhone) whatsappMsg += `%0A📞 *Phone:* ${safePhone}`;
+            whatsappMsg += `%0A💬 *Message:* ${safeMessage}`;
+            
+            window.open(`https://wa.me/${coachingNumber}?text=${whatsappMsg}`, '_blank', 'noopener,noreferrer');
             
             document.getElementById('q-name').value = '';
             document.getElementById('q-phone').value = '';
@@ -870,10 +923,12 @@
             return false;
         };
 
+        // Load teachers from Firebase Realtime Database
         const teachersRef = ref(db, 'teachers');
         onValue(teachersRef, (snapshot) => {
             const container = document.getElementById('teachersContainer');
             const data = snapshot.val();
+            
             const defaultTeachers = [
                 { name: "AmarPal Sir", expertise: "Mathematics Specialist", photo: "images/amarpal-sir.jpg" },
                 { name: "Arvind Sir", expertise: "Physics Expert", photo: "images/arvind-sir.jpg" },
@@ -883,31 +938,40 @@
                 { name: "Komal Mam", expertise: "Math Expert", photo: "images/komal-mam.jpg" },
                 { name: "Pradeep Sir", expertise: "Bio Expert", photo: "images/pradeep-sir.jpg" }
             ];
+            
             let allTeachers = [...defaultTeachers];
             if (data) {
                 allTeachers = [...defaultTeachers, ...Object.values(data)];
             }
-            container.innerHTML = allTeachers.map(t => `
+            
+            container.innerHTML = allTeachers.map(t => {
+                const safeName = escapeHTML(t.name);
+                const safeExpertise = escapeHTML(t.expertise);
+                const safePhoto = t.photo ? t.photo : '';
+                
+                return `
                 <div class="teacher-card">
-                    ${t.photo ? 
-                        `<img src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    ${safePhoto ? 
+                        `<img src="${safePhoto}" alt="${safeName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
                         <div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:none;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>` :
                         `<div style="width:120px;height:120px;border-radius:50%;background:rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 15px;border:3px solid var(--cyan);">👨‍🏫</div>`
                     }
-                    <h4>${t.name}</h4>
-                    <p>${t.expertise}</p>
-                </div>
-            `).join('');
+                    <h4>${safeName}</h4>
+                    <p>${safeExpertise}</p>
+                </div>`;
+            }).join('');
         });
 
         window.showToast = showToast;
     </script>
 
     <script>
+        // Loader
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2200);
         });
 
+        // Scroll reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
@@ -916,6 +980,7 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // Custom cursor
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
         if (cursor && cursorDot) {
@@ -933,6 +998,7 @@
             });
         }
 
+        // Button hover effect
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
@@ -947,10 +1013,12 @@
             });
         });
 
+        // Particle system
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         const particleCount = 80;
+        
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -966,6 +1034,7 @@
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
         }
+        
         function resizeParticles() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -977,9 +1046,11 @@
                 particles.push(p);
             }
         }
+        
         window.addEventListener('resize', resizeParticles);
         resizeParticles();
         for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+        
         function animateParticles() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             for (let i = 0; i < particles.length; i++) {
