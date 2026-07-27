@@ -6,30 +6,6 @@
     <title>Amar Educational Cafe | Where Learning Becomes Magic</title>
     <link rel="icon" type="image/png" href="/favicon.png?v=1">
 
-    <!-- 🔒 Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://cdnjs.cloudflare.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-    connect-src 'self' 
-        https://*.firebaseio.com 
-        https://*.googleapis.com 
-        https://identitytoolkit.googleapis.com 
-        https://securetoken.googleapis.com 
-        https://*.firebaseapp.com 
-        wss://*.firebaseio.com
-        https://accounts.google.com;
-    img-src 'self' data: https://lh3.googleusercontent.com https://www.google.com;
-    frame-src 'self' 
-        https://*.firebaseapp.com 
-        https://accounts.google.com 
-        https://*.googleapis.com
-        https://amar-education-cafe.firebaseapp.com;
-    form-action 'self' https://wa.me;
-    object-src 'none';
-">
-
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -571,7 +547,6 @@
         </ul>
     </nav>
 
-    <!-- SPACER -->
     <div style="height: 110px; width: 100%;"></div>
 
     <div class="modal-overlay" id="globalModal">
@@ -709,7 +684,6 @@
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-        // Firebase config - public-safe, protected by Realtime Database rules
         const firebaseConfig = {
             apiKey: "AIzaSyAIABOUICcxxDbjVGT_EBH9WzTr_Lp1UVg",
             authDomain: "amar-education-cafe.firebaseapp.com",
@@ -726,19 +700,16 @@
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        // Admin emails - only for UI, actual security via Realtime Database rules
         const ADMIN_EMAILS = ['peeyushmalik601@gmail.com','amarpalmalik1@gmail.com'];
 
         window.currentUser = null;
         window.isAdmin = false;
 
-        // XSS Prevention
         function escapeHTML(str) {
             if (!str) return '';
             return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
         }
 
-        // Rate limiting for query form
         let lastQueryTime = 0;
 
         onAuthStateChanged(auth, (user) => {
@@ -896,7 +867,6 @@
         window.sendQuery = function(event) {
             event.preventDefault();
             
-            // Rate limiting - 5 seconds between queries
             const now = Date.now();
             if (now - lastQueryTime < 5000) {
                 showToast('⚠️ Please wait before sending another query!', 'warning');
@@ -909,7 +879,6 @@
             const message = document.getElementById('q-message').value.trim();
             const coachingNumber = "918057232954";
             
-            // Sanitize inputs for WhatsApp URL
             const safeName = encodeURIComponent(name);
             const safePhone = phone ? encodeURIComponent(phone) : '';
             const safeMessage = encodeURIComponent(message);
@@ -927,7 +896,6 @@
             return false;
         };
 
-        // Load teachers from Firebase Realtime Database
         const teachersRef = ref(db, 'teachers');
         onValue(teachersRef, (snapshot) => {
             const container = document.getElementById('teachersContainer');
@@ -970,12 +938,10 @@
     </script>
 
     <script>
-        // Loader
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2200);
         });
 
-        // Scroll reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
@@ -984,7 +950,6 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Custom cursor
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
         if (cursor && cursorDot) {
@@ -1002,7 +967,6 @@
             });
         }
 
-        // Button hover effect
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
@@ -1017,7 +981,6 @@
             });
         });
 
-        // Particle system
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
